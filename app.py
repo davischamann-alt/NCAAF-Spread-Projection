@@ -50,6 +50,48 @@ def scoreboard(date_str):
     return pd.DataFrame(rows)
 
 
+def espn_events(**params):
+    r = requests.get(ESPN, params={"groups": 80, "limit": 300, **params}, timeout=20)
+    r.raise_for_status()
+    return r.json().get("events", [])
+
+
+def season_of(d):
+    return d.year if d.month >= 7 else d.year - 1
+
+
+@st.cache_data(ttl=3600)
+def season_ratings(season, today):
+    """Season-to-date points scored/allowed per game from completed games (week by week:
+    ESPN's date-range queries currently fail, but week + season year works)."""
+    tot, seen = {}, set()
+
+    def done(ev):
+        return ev["competitions"][0]["status"]["type"]["state"] == "post"
+
+    def add(events):
+        for ev in events:
+            if ev["id"] in seen or not done(ev):
+                continue
+            seen.add(ev["id"])
+            t = {x["homeAway"]: x for x in ev["competitions"][0]["competitors"]}
+            for me, op in (("home", "away"), ("away", "home")):
+                s = tot.setdefault(t[me]["team"]["location"], [0, 0, 0])
+                s[0] += int(t[me].get("score") or 0)
+                s[1] += int(t[op].get("score") or 0)
+                s[2] += 1
+
+    add(espn_events(dates=f"{season}08"))  # Week 0 games in August
+    for w in range(1, 17):
+        evs = espn_events(dates=season, seasontype=2, week=w)
+        add(evs)
+        if w > 1 and not any(done(e) for e in evs):
+            break
+    mx = max((v[2] for v in tot.values()), default=0)
+    rows = [(n, a / g, b / g, g) for n, (a, b, g) in tot.items() if g >= max(1, (mx + 1) // 2)]
+    return pd.DataFrame(rows, columns=["team", "ppg", "papg", "games"]).round(2)
+
+
 def grade(hist, games):
     if hist.empty or games.empty:
         return hist
@@ -73,7 +115,7 @@ if st.sidebar.button("Refresh now"):
 auto = st.sidebar.checkbox("Auto-refresh every 30s", True)
 
 ratings = load_ratings(RATINGS)
-COLS = ["Game", "Status", "Score", "Home line", "Proj margin", "Edge (pts)", "Pick", "Pregame %", "Live cover %"]
+COLS = ["Game", "Status", "Score", "Home line", "Proj margin", "Edge (pts)", "Pick", "Pregame %", "Live cover %", "Note"]
 
 
 @st.cache_resource
@@ -120,7 +162,8 @@ def live_board():
             store[g.id] = g.line  # remember the pregame line
             pd.DataFrame(list(store.items()), columns=["id", "line"]).to_csv(DATA / "lines.csv", index=False)
         line = g.line if g.state == "pre" else store.get(g.id, g.line)
-        row = {"Game": f"{g.away} @ {g.home}", "Status": g.status, "Score": f"{g.away_score}-{g.home_score}"}
+        row = {"Game": f"{g.away} @ {g.home}", "Status": g.status, "Score": f"{g.away_score}-{g.home_score}",
+               "Home line": line if pd.notna(line) else None}
         p = project(g.home, g.away, ratings, g.neutral, hfa)
         if p is not None and pd.notna(line):
             margin = p[0] - p[1]
@@ -135,6 +178,12 @@ def live_board():
                 log.append(dict(id=g.id, date=str(day), home=g.home, away=g.away, line=line,
                                 proj_margin=round(margin, 2), pick_side="home" if home_pick else "away",
                                 cover_prob=round(pre, 4), final_margin=None, covered=None))
+        else:
+            missing = [t for t in (g.home, g.away) if t not in ratings.index]
+            notes = ["Add to ratings: " + ", ".join(missing)] if missing else []
+            if pd.isna(line):
+                notes.append("No line yet" if g.state == "pre" else "No pregame line saved")
+            row["Note"] = " · ".join(notes)
         table.append(row)
     if not table:
         st.info("No games found for this date.")
@@ -158,18 +207,43 @@ with t1:
 
 
 with t2:
-    st.write("Add every team you want rated: points scored and allowed per game.")
-    edited = st.data_editor(ratings.reset_index(), num_rows="dynamic", hide_index=True, key="ratings")
+    if m := st.session_state.pop("rating_msg", None):
+        st.success(m)
+    rv = st.session_state.setdefault("rv", 0)
+    st.write("Points scored (`ppg`) and allowed (`papg`) per game. Team names must match the Game column.")
+    if st.button("⚡ Auto-fill from ESPN results"):
+        try:
+            with st.spinner("Fetching this season's results..."):
+                fetched = season_ratings(season_of(day), dt.date.today().isoformat())
+        except Exception as ex:
+            st.error(f"Couldn't fetch results: {ex}")
+        else:
+            if fetched.empty:
+                st.warning("No completed games found yet.")
+            else:
+                cur = ratings.reset_index()
+                keep = cur[~cur["team"].isin(fetched["team"])]
+                pd.concat([fetched, keep]).sort_values("team").to_csv(RATINGS, index=False)
+                st.session_state["rv"] = rv + 1
+                st.session_state["rating_msg"] = f"Filled in {len(fetched)} teams from completed games this season."
+                st.rerun()
+    st.caption("Overwrites ratings for teams found in ESPN results and keeps any others. Season-to-date averages "
+               "(including games vs FCS teams, not opponent-adjusted), so early-season numbers are noisy. "
+               "Teams with far fewer games than the rest (mostly FCS opponents) are skipped.")
+    edited = st.data_editor(ratings.reset_index(), num_rows="dynamic", hide_index=True, key=f"ratings_{rv}")
     if st.button("Save ratings"):
         edited.dropna(subset=["team"]).to_csv(RATINGS, index=False)
+        st.session_state["rv"] = rv + 1
         st.rerun()
 
 with t3:
     bets = read(BETS, BET_COLS)
-    ed = st.data_editor(bets, num_rows="dynamic", hide_index=True, key="bets", column_config={
+    ed = st.data_editor(bets, num_rows="dynamic", hide_index=True, key=f"bets_{st.session_state.get('bv', 0)}", column_config={
         "result": st.column_config.SelectboxColumn(options=["W", "L", "Push"])})
     if st.button("Save bets"):
         ed.to_csv(BETS, index=False)
+        st.session_state["bv"] = st.session_state.get("bv", 0) + 1
+        st.rerun()
     d = ed.dropna(subset=["stake", "result"]).copy()
     if not d.empty:
         d["stake"] = pd.to_numeric(d["stake"], errors="coerce").fillna(0)

@@ -9,7 +9,7 @@ No API keys or paid services. Live scores and lines come from ESPN's public scor
 | Tab | What it does |
 | --- | --- |
 | **Today's games** | Scores, status, line, projected margin, edge, the model's pick, pregame cover %, and a live cover % that updates with the score and clock. Auto-refreshes every 30 seconds. |
-| **Team ratings** | Editable table of points scored and allowed per game for each team. This is what drives the model. |
+| **Team ratings** | Editable table of points scored and allowed per game for each team, with an **Auto-fill from ESPN results** button that fills it from this season's completed games. This is what drives the model. |
 | **Bet tracker** | Log your bets (date, game, side, line, odds, stake, result) and see net profit and ROI. |
 | **Backtest** | Logged picks are graded automatically when games go final, then broken out by confidence bucket (50-54%, 55-59%, and so on). |
 
@@ -37,11 +37,11 @@ On Windows, activate the environment with `venv\Scripts\activate` instead.
 
 ## Before you rely on it
 
-1. **Replace the placeholder ratings.** `data/team_ratings.csv` ships with eight teams and made-up numbers. Add real points-per-game (`ppg`) and points-allowed-per-game (`papg`) for every team you want rated, ideally all of FBS. The league average used by the model is calculated from the teams in this file, so a short list skews the projections.
+1. **Replace the placeholder ratings.** `data/team_ratings.csv` ships with eight teams and made-up numbers. On the **Team ratings** tab, click **Auto-fill from ESPN results** to load season-to-date points scored (`ppg`) and allowed (`papg`) per game for every FBS team, or type your own. Auto-fill overwrites teams it finds and keeps the rest. The averages are not opponent-adjusted, so early-season numbers are noisy. The league average used by the model is calculated from the teams in this file, so a short list skews the projections.
 2. **Match team names to ESPN.** Names must match the school name ESPN uses (for example `Ohio State`, `Notre Dame`). If a game shows no pick, check the name in the Game column against your CSV.
 3. **Open the app before kickoff on game day.** The app saves each game's pregame line when it first sees it. Live probabilities are measured against that line, because live odds already include the score. If you open the app after kickoff, it falls back to ESPN's current line, which makes the live % less reliable.
 
-A game only gets a pick when both teams are in the ratings file and a line is available.
+A game only gets a pick when both teams are in the ratings file and a line is available. When a game has no pick, the **Note** column says why (for example `Add to ratings: Virginia Tech` or `No line yet`), and the line is shown whenever ESPN has one.
 
 ## How the model works
 

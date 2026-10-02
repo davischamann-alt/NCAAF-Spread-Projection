@@ -1,9 +1,140 @@
-team,ppg,papg
-Georgia,36.0,14.5
-Alabama,35.0,16.0
-Ohio State,38.0,12.0
-Texas,34.5,15.0
-Michigan,28.0,15.5
-Oregon,37.0,17.0
-Notre Dame,33.0,16.5
-Vanderbilt,29.0,26.0
+team,ppg,papg,games
+Air Force,34.0,23.67,3.0
+Akron,19.5,31.75,4.0
+Alabama,48.0,20.25,4.0
+App State,34.75,22.25,4.0
+Arizona,32.0,19.0,4.0
+Arizona State,38.0,24.0,3.0
+Arkansas,23.0,27.0,4.0
+Arkansas State,25.0,23.5,4.0
+Army,34.67,16.0,3.0
+Auburn,30.0,20.75,4.0
+BYU,44.0,15.67,3.0
+Ball State,18.0,37.5,4.0
+Baylor,29.75,13.0,4.0
+Boise State,33.75,21.25,4.0
+Boston College,19.75,23.0,4.0
+Bowling Green,8.25,36.25,4.0
+Buffalo,21.25,33.25,4.0
+California,26.0,23.5,4.0
+Central Michigan,11.75,27.5,4.0
+Charlotte,19.5,36.0,4.0
+Cincinnati,40.5,20.5,4.0
+Clemson,21.0,22.0,4.0
+Coastal Carolina,25.0,23.5,4.0
+Colorado,21.5,24.5,4.0
+Colorado State,40.25,34.25,4.0
+Delaware,23.25,24.5,4.0
+Duke,36.25,11.0,4.0
+East Carolina,24.0,25.25,4.0
+Eastern Michigan,19.0,27.2,5.0
+Florida,53.5,22.75,4.0
+Florida Atlantic,30.0,30.75,4.0
+Florida International,18.0,14.5,4.0
+Florida State,32.0,25.25,4.0
+Fresno State,28.25,19.0,4.0
+Georgia,54.75,13.25,4.0
+Georgia Southern,23.25,23.75,4.0
+Georgia State,38.75,21.25,4.0
+Georgia Tech,27.0,26.0,4.0
+Hawai'i,18.0,26.0,4.0
+Houston,44.5,20.5,4.0
+Illinois,34.0,26.5,4.0
+Indiana,43.5,9.75,4.0
+Iowa,32.75,8.0,4.0
+Iowa State,30.75,16.0,4.0
+Jacksonville State,27.4,21.8,5.0
+James Madison,44.75,12.25,4.0
+Kansas,29.67,22.67,3.0
+Kansas State,40.5,15.25,4.0
+Kennesaw State,21.75,22.5,4.0
+Kent State,16.25,36.0,4.0
+Kentucky,34.5,25.0,4.0
+LSU,38.75,15.5,4.0
+Liberty,30.5,18.75,4.0
+Louisiana,30.75,19.25,4.0
+Louisiana Tech,37.67,29.0,3.0
+Louisville,41.25,28.75,4.0
+Marshall,23.5,32.5,4.0
+Maryland,32.25,25.75,4.0
+Massachusetts,36.25,12.75,4.0
+Memphis,33.5,26.0,4.0
+Mercyhurst,9.33,57.67,3.0
+Miami,51.75,9.0,4.0
+Miami (OH),28.5,30.5,4.0
+Michigan,25.25,14.75,4.0
+Michigan State,22.0,21.25,4.0
+Middle Tennessee,26.0,21.25,4.0
+Minnesota,35.0,19.0,4.0
+Mississippi State,43.0,21.0,4.0
+Missouri,35.75,20.75,4.0
+Missouri State,24.0,32.0,4.0
+NC State,38.25,25.0,4.0
+Navy,30.67,25.67,3.0
+Nebraska,42.5,12.0,4.0
+Nevada,27.25,24.25,4.0
+New Mexico,39.0,11.5,4.0
+New Mexico State,27.8,26.4,5.0
+North Carolina,23.33,13.67,3.0
+North Dakota State,35.0,12.25,4.0
+North Texas,40.6,33.0,5.0
+Northern Illinois,13.75,36.25,4.0
+Northwestern,32.67,18.0,3.0
+Notre Dame,42.25,8.25,4.0
+Ohio,30.25,31.0,4.0
+Ohio State,45.0,12.25,4.0
+Oklahoma,22.0,16.0,4.0
+Oklahoma State,37.25,19.75,4.0
+Old Dominion,22.25,30.0,4.0
+Ole Miss,35.5,30.75,4.0
+Oregon,47.5,23.25,4.0
+Oregon State,32.25,23.0,4.0
+Penn State,36.75,11.5,4.0
+Pittsburgh,39.25,8.5,4.0
+Purdue,32.0,39.5,4.0
+Rice,19.0,30.25,4.0
+Rutgers,33.75,28.5,4.0
+SMU,37.0,24.75,4.0
+Sacramento State,17.6,28.6,5.0
+Sam Houston,27.75,24.0,4.0
+San Diego State,23.0,28.75,4.0
+San José State,23.25,27.25,4.0
+South Alabama,31.25,30.75,4.0
+South Carolina,38.5,24.75,4.0
+South Florida,30.0,14.0,4.0
+Southern Miss,24.5,29.5,4.0
+Stanford,21.0,33.5,4.0
+Syracuse,32.33,17.0,3.0
+TCU,29.25,12.5,4.0
+Temple,28.0,27.75,4.0
+Tennessee,40.0,15.5,4.0
+Texas,33.25,13.25,4.0
+Texas A&M,31.25,21.5,4.0
+Texas State,36.25,33.75,4.0
+Texas Tech,36.25,18.5,4.0
+Toledo,43.25,26.0,4.0
+Troy,21.25,21.5,4.0
+Tulane,18.75,23.25,4.0
+Tulsa,27.8,21.2,5.0
+UAB,21.75,25.75,4.0
+UCF,36.25,15.25,4.0
+UCLA,44.75,18.75,4.0
+UConn,34.75,22.25,4.0
+UL Monroe,21.25,42.75,4.0
+UNLV,21.5,21.75,4.0
+USC,39.8,26.4,5.0
+UTEP,18.75,36.5,4.0
+UTSA,35.25,29.25,4.0
+Utah,43.25,10.25,4.0
+Utah State,13.0,22.0,4.0
+Vanderbilt,28.25,21.75,4.0
+Virginia,40.5,13.0,4.0
+Virginia Tech,43.25,16.0,4.0
+Wake Forest,31.5,28.0,4.0
+Washington,28.0,16.75,4.0
+Washington State,22.25,24.75,4.0
+West Virginia,36.25,24.75,4.0
+Western Kentucky,19.8,39.6,5.0
+Western Michigan,24.0,20.0,4.0
+Wisconsin,31.75,20.0,4.0
+Wyoming,17.75,20.5,4.0
