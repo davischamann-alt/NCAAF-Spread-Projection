@@ -163,25 +163,32 @@ def weekly_fpi(season, week):
 
 
 def pregame_line(gid):
-    """(home line, total) from ESPN's game summary, which keeps the pregame line after the game."""
+    """(home closing line, home opening line, total) from ESPN's game summary, which keeps the
+    pregame lines after the game."""
     r = requests.get(SUMMARY, params={"event": gid}, timeout=20)
     r.raise_for_status()
     pc = r.json().get("pickcenter") or []
     if not pc or pc[0].get("spread") is None:
-        return gid, None, None
-    return gid, num(pc[0]["spread"]), num(pc[0]["overUnder"]) if pc[0].get("overUnder") is not None else None
+        return gid, None, None, None
+    o = pc[0]
+    open_line = num(o.get("pointSpread", {}).get("home", {}).get("open", {}).get("line", ""))
+    return gid, num(o["spread"]), open_line, num(o["overUnder"]) if o.get("overUnder") is not None else None
 
 
 def closing_lines(ids):
-    """Pregame lines for finished games, cached in data/closing_lines.csv so each game is fetched once."""
-    have = pd.read_csv(CLOSING, dtype={"id": str}) if CLOSING.exists() else pd.DataFrame(columns=["id", "line", "total"])
+    """{id: (closing line, opening line)} for finished games, cached in data/closing_lines.csv so
+    each game is fetched once. A cache from before opening lines were saved is refetched."""
+    cols = ["id", "line", "open", "total"]
+    have = pd.read_csv(CLOSING, dtype={"id": str}) if CLOSING.exists() else pd.DataFrame(columns=cols)
+    if "open" not in have.columns:
+        have = pd.DataFrame(columns=cols)
     todo = sorted(set(ids) - set(have["id"]))
     if todo:
         with ThreadPoolExecutor(8) as pool:
-            got = pd.DataFrame(pool.map(pregame_line, todo), columns=["id", "line", "total"])
+            got = pd.DataFrame(pool.map(pregame_line, todo), columns=cols)
         have = pd.concat([have, got], ignore_index=True)
         have.to_csv(CLOSING, index=False)
-    return dict(zip(have["id"], have["line"]))
+    return dict(zip(have["id"], zip(have["line"], have["open"])))
 
 
 @st.cache_data(ttl=3600)
@@ -410,7 +417,7 @@ with t4:
     st.subheader("Season backtest (walk-forward)")
     st.caption("Replays this season from week 3: each week's FBS games are predicted using only earlier results "
                "(points ratings refit on prior games, FPI from the previous week's snapshot) and graded against "
-               "ESPN's final pregame line. Lines are fetched once and cached in data/closing_lines.csv. "
+               "ESPN's opening or closing line. Lines are fetched once and cached in data/closing_lines.csv. "
                "At -110 odds you need 52.4% to break even.")
     if st.button("▶ Run season backtest"):
         try:
@@ -420,14 +427,27 @@ with t4:
             st.error(f"Couldn't run backtest: {ex}")
     res = st.session_state.get("bt")
     if res is not None and not res.empty:
-        min_edge = st.slider("Only bet when edge is at least (pts)", 0.0, 10.0, 0.0, 0.5)
+        c1, c2 = st.columns(2)
+        against = c1.radio("Grade against", ["open", "close"], horizontal=True,
+                           format_func=lambda x: {"open": "Opening line", "close": "Closing line"}[x],
+                           help="Opening: picks made when lines are first posted, the market's weakest point. "
+                                "Closing: the final line at kickoff, the market's strongest.")
+        min_edge = c2.slider("Only bet when edge is at least (pts)", 0.0, 10.0, 0.0, 0.5)
         pct = st.column_config.NumberColumn(format="percent")
-        st.dataframe(score_backtest(res, min_edge), column_config={
+        st.dataframe(score_backtest(res, min_edge, against), column_config={
             "hit_rate": pct, "mae_vs_result": st.column_config.NumberColumn("avg miss vs result", format="%.1f"),
             "rmse_vs_result": st.column_config.NumberColumn("RMSE vs result", format="%.1f",
                                                             help="Use this as the margin std dev for that source"),
-            "mae_vs_line": st.column_config.NumberColumn("avg gap to line", format="%.1f")})
-        weekly = res.groupby("week").apply(lambda d: score_backtest(d, min_edge)["hit_rate"].iloc[:3], include_groups=False)
+            "mae_vs_line": st.column_config.NumberColumn("avg gap to line", format="%.1f"),
+            "avg_clv": st.column_config.NumberColumn("avg CLV (pts)", format="%+.2f",
+                                                     help="Average points the line moved toward the pick by kickoff"),
+            "clv_beat_rate": st.column_config.NumberColumn("line moved our way", format="percent",
+                                                           help="Share of picks whose line moved toward the pick, among lines that moved")})
+        if against == "open":
+            st.caption("CLV (closing line value) = how far the line moved toward each pick between open and kickoff. "
+                       "Beating the close consistently is the standard sign of a real edge, and it shows up in far "
+                       "fewer games than win rate does. Lines that didn't move are left out of the 'moved our way' rate.")
+        weekly = res.groupby("week").apply(lambda d: score_backtest(d, min_edge, against)["hit_rate"].iloc[:3], include_groups=False)
         st.write("Hit rate by week")
         st.dataframe(weekly, column_config={c: pct for c in weekly.columns})
         st.caption(f"{len(res)} games, weeks {res.week.min()}-{res.week.max()}. "

@@ -79,7 +79,8 @@ def pool_fcs(games, fbs=None):
 def walk_forward(games, lines, fpi_by_week, fbs, hfa=2.5, start_week=3):
     """Predict each week using only what was known before it: points ratings fit on earlier
     games, and the FPI snapshot from the previous week. games: DataFrame of completed games
-    (id, week, home, away, home_id, away_id, home_pts, away_pts, neutral); lines: {id: home line};
+    (id, week, home, away, home_id, away_id, home_pts, away_pts, neutral);
+    lines: {id: (closing home line, opening home line)};
     fpi_by_week: {week: {team id: fpi}}. Returns one row per FBS-vs-FBS game with a line."""
     rows = []
     for w in sorted(games.loc[games.week >= start_week, "week"].unique()):
@@ -88,7 +89,7 @@ def walk_forward(games, lines, fpi_by_week, fbs, hfa=2.5, start_week=3):
         r = fit_ratings(pool_fcs(fit, fbs))[0].set_index("team")
         fpi = fpi_by_week.get(w - 1, {})
         for g in games[games.week == w].itertuples():
-            line = lines.get(g.id)
+            line, open_line = lines.get(g.id, (None, None))
             if g.home not in fbs or g.away not in fbs or line is None or pd.isna(line):
                 continue
             p = project(g.home, g.away, r, g.neutral, hfa)
@@ -98,26 +99,38 @@ def walk_forward(games, lines, fpi_by_week, fbs, hfa=2.5, start_week=3):
                 f = fpi[g.home_id] - fpi[g.away_id] + (0 if g.neutral else hfa)
             if pts is None or f is None:
                 continue
-            rows.append(dict(id=g.id, week=w, game=f"{g.away} @ {g.home}", line=line,
+            rows.append(dict(id=g.id, week=w, game=f"{g.away} @ {g.home}", line=line, open_line=open_line,
                              final_margin=g.home_pts - g.away_pts, points=pts, fpi=f, blend=(pts + f) / 2))
     return pd.DataFrame(rows)
 
 
-def score_backtest(res, min_edge=0.0):
-    """Per-source against-the-spread record and accuracy. Picks with edge below min_edge are
-    skipped. RMSE vs result is the right value for the margin std dev setting."""
+def score_backtest(res, min_edge=0.0, against="close"):
+    """Per-source against-the-spread record and accuracy. against="open" grades picks made at the
+    opening line and adds closing line value (CLV): how far the line moved toward the pick by
+    kickoff. Sharp bettors aim for positive CLV, which shows edge long before win rates do.
+    Picks with edge below min_edge are skipped. RMSE vs result is the right value for the
+    margin std dev setting."""
+    col_line = "open_line" if against == "open" else "line"
+    res = res.dropna(subset=[col_line])
     out = []
     for name, col in (("Adjusted points", "points"), ("ESPN FPI", "fpi"), ("Blend", "blend")):
-        edge = res[col] + res["line"]
+        edge = res[col] + res[col_line]
         pick = res[edge.abs() >= min_edge]
-        ats = (pick["final_margin"] + pick["line"]) * np.sign(edge[pick.index])
+        side = np.sign(edge[pick.index])
+        ats = (pick["final_margin"] + pick[col_line]) * side
         w, l = int((ats > 0).sum()), int((ats < 0).sum())
         err = res[col] - res["final_margin"]
-        out.append(dict(source=name, picks=w + l, wins=w, losses=l, pushes=int((ats == 0).sum()),
-                        hit_rate=w / (w + l) if w + l else None,
-                        mae_vs_result=err.abs().mean(), rmse_vs_result=np.sqrt((err ** 2).mean()),
-                        mae_vs_line=(res[col] + res["line"]).abs().mean()))
-    err = -res["line"] - res["final_margin"]
-    out.append(dict(source="Vegas line (baseline)", mae_vs_result=err.abs().mean(),
-                    rmse_vs_result=np.sqrt((err ** 2).mean()), mae_vs_line=0.0))
+        row = dict(source=name, picks=w + l, wins=w, losses=l, pushes=int((ats == 0).sum()),
+                   hit_rate=w / (w + l) if w + l else None,
+                   mae_vs_result=err.abs().mean(), rmse_vs_result=np.sqrt((err ** 2).mean()),
+                   mae_vs_line=edge.abs().mean())
+        if against == "open":
+            # home line falling (home more favored) is movement toward a home pick
+            clv = (pick["open_line"] - pick["line"]) * side
+            moved = clv[clv != 0]
+            row.update(avg_clv=clv.mean(), clv_beat_rate=(moved > 0).mean() if len(moved) else None)
+        out.append(row)
+    err = -res[col_line] - res["final_margin"]
+    out.append(dict(source=("Opening" if against == "open" else "Closing") + " line (baseline)",
+                    mae_vs_result=err.abs().mean(), rmse_vs_result=np.sqrt((err ** 2).mean()), mae_vs_line=0.0))
     return pd.DataFrame(out).set_index("source")

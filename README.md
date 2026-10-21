@@ -94,7 +94,7 @@ cfb_edge/
     ├── team_ratings.csv    # you edit this (also editable in the app)
     ├── history.csv         # created when you log picks; graded automatically
     ├── lines.csv           # pregame lines the app has saved
-    ├── closing_lines.csv   # pregame lines for finished games, fetched by the season backtest
+    ├── closing_lines.csv   # opening and closing lines for finished games, fetched by the season backtest
     └── bets.csv            # created when you save in the Bet tracker
 ```
 
@@ -112,9 +112,12 @@ cfb_edge/
 
 ## Season backtest
 
-On the **Backtest** tab, click **Run season backtest**. Starting at week 3, it predicts each week's FBS-vs-FBS games using only what was known beforehand: points ratings refit on earlier games, and ESPN's FPI snapshot from the previous week (ESPN saves one the day after each week's games). Every prediction is graded against ESPN's final pregame line, which is fetched from the game summary feed once and cached in `data/closing_lines.csv`.
+On the **Backtest** tab, click **Run season backtest**. Starting at week 3, it predicts each week's FBS-vs-FBS games using only what was known beforehand: points ratings refit on earlier games, and ESPN's FPI snapshot from the previous week (ESPN saves one the day after each week's games). Predictions are graded against ESPN's opening or closing line (pick with **Grade against**). Both are fetched from the game summary feed once and cached in `data/closing_lines.csv`.
 
-The table shows each source's against-the-spread record and hit rate, plus how far its projections landed from the final margin. The **Vegas line** row is the baseline. Use the slider to bet only when the edge is at least a given number of points. At -110 odds you need 52.4% to break even. **RMSE vs result** is the value to use for the margin std dev setting with that source.
+- **Opening line:** picks made when lines are first posted, which is when the market is weakest. This view adds **closing line value (CLV)**: how far the line moved toward each pick by kickoff, and how often it moved our way. Consistently beating the closing line is the standard sign of a real edge, and it shows up in far fewer games than win rate does.
+- **Closing line:** the final line at kickoff, the market's strongest.
+
+The table shows each source's against-the-spread record and hit rate, plus how far its projections landed from the final margin. The **line (baseline)** row shows how close the line itself came. Use the slider to bet only when the edge is at least a given number of points. At -110 odds you need 52.4% to break even. **RMSE vs result** is the value to use for the margin std dev setting with that source.
 
 ## Limitations
 
