@@ -1,4 +1,6 @@
 import datetime as dt
+import json
+import os
 import re
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -13,6 +15,10 @@ from model import (cover_prob, fit_ratings, fpi_margin, live_cover_prob, load_ra
 DATA = Path(__file__).parent / "data"
 RATINGS, HISTORY, BETS = DATA / "team_ratings.csv", DATA / "history.csv", DATA / "bets.csv"
 CLOSING = DATA / "closing_lines.csv"
+CFBD_DIR = DATA / "cfbd"
+CFBD = "https://api.collegefootballdata.com"
+# sportsbooks to take lines from, in order of preference (CFBD's provider names)
+BOOKS = ["DraftKings", "ESPN Bet", "Bovada", "William Hill (New Jersey)", "consensus"]
 ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
 FPI = "https://site.web.api.espn.com/apis/fitt/v3/sports/football/college-football/powerindex"
 FPI_WEEKLY = "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football"
@@ -96,7 +102,7 @@ def season_games(season):
             seen.add(ev["id"])
             c = ev["competitions"][0]
             t = {x["homeAway"]: x for x in c["competitors"]}
-            rows.append(dict(id=ev["id"], week=week, home=t["home"]["team"]["location"],
+            rows.append(dict(id=ev["id"], week=week, start=ev["date"], home=t["home"]["team"]["location"],
                              away=t["away"]["team"]["location"], home_id=t["home"]["team"]["id"],
                              away_id=t["away"]["team"]["id"], home_pts=int(t["home"].get("score") or 0),
                              away_pts=int(t["away"].get("score") or 0), neutral=c.get("neutralSite", False)))
@@ -107,7 +113,7 @@ def season_games(season):
         add(evs, w)
         if w > 1 and not any(done(e) for e in evs):
             break
-    return pd.DataFrame(rows, columns=["id", "week", "home", "away", "home_id", "away_id",
+    return pd.DataFrame(rows, columns=["id", "week", "start", "home", "away", "home_id", "away_id",
                                        "home_pts", "away_pts", "neutral"])
 
 
@@ -149,17 +155,37 @@ def espn_fpi(season):
 
 
 def weekly_fpi(season, week):
-    """FPI snapshot ESPN took the day after `week`'s games, by team id."""
+    """(time taken, {team id: fpi}) for ESPN's FPI snapshot for `week`, or None if there isn't one."""
     url = f"{FPI_WEEKLY}/seasons/{season}/types/2/weeks/{week}/powerindex"
     r = requests.get(url, params={"limit": 200}, timeout=30)
     r.raise_for_status()
+    items = r.json().get("items", [])
+    if not items:
+        return None
     out = {}
-    for it in r.json().get("items", []):
+    for it in items:
         tid = re.search(r"/teams/(\d+)", it["team"]["$ref"]).group(1)
         v = next((p["value"] for p in it.get("predictives", []) if p["name"] == "fpi"), None)
         if v is not None:
             out[tid] = v
-    return out
+    return pd.Timestamp(items[0]["lastUpdated"]), out
+
+
+def fpi_before_weeks(season, games, max_age_days=10):
+    """{week - 1: fpi} as walk_forward expects: for each week, the newest snapshot taken before
+    that week's first game. Picking by timestamp matters for past seasons, where ESPN has
+    overwritten some weekly snapshots months later. Weeks whose newest earlier snapshot is
+    stale get no FPI, so their games are left out rather than graded with old ratings."""
+    snaps = [x for w in range(1, 17) if (x := weekly_fpi(season, w))]
+    out = {}
+    for w, first in games.groupby("week")["start"].min().items():
+        first = pd.Timestamp(first)
+        before = [x for x in snaps if x[0] < first]
+        if before:
+            ts, vals = max(before, key=lambda x: x[0])
+            if first - ts <= pd.Timedelta(days=max_age_days):
+                out[w - 1] = vals
+    return out, (max(snaps, key=lambda x: x[0])[1] if snaps else {})
 
 
 def pregame_line(gid):
@@ -193,14 +219,63 @@ def closing_lines(ids):
 
 @st.cache_data(ttl=3600)
 def season_backtest(season, hfa, today):
-    """Walk-forward results for every FBS game this season (see model.walk_forward)."""
-    games = season_games(season)
-    weeks = sorted(w for w in games.week.unique() if w >= 1)
-    fpi_by_week = {w: weekly_fpi(season, w) for w in weeks}
-    names = team_names(games)
-    fbs = {names[i] for i in fpi_by_week[weeks[-1]] if i in names}
-    both = games[games.home.isin(fbs) & games.away.isin(fbs) & (games.week >= 3)]
-    return walk_forward(games, closing_lines(both["id"]), fpi_by_week, fbs, hfa)
+    """Walk-forward results for every FBS game in a season (see model.walk_forward). The current
+    season comes from ESPN; past seasons' games and lines come from CollegeFootballData."""
+    if season == season_of(dt.date.fromisoformat(today)):
+        games = season_games(season)
+        fpi_by_week, latest = fpi_before_weeks(season, games)
+        names = team_names(games)
+        fbs = {names[i] for i in latest if i in names}  # FPI covers exactly the FBS teams
+        both = games[games.home.isin(fbs) & games.away.isin(fbs) & (games.week >= 3)]
+        lines = closing_lines(both["id"])
+    else:
+        games, lines, fbs = cfbd_season(season)
+        fpi_by_week = fpi_before_weeks(season, games)[0]
+    res = walk_forward(games, lines, fpi_by_week, fbs, hfa)
+    return res.assign(season=season)
+
+
+def cfbd_key():
+    try:
+        key = st.secrets.get("CFBD_API_KEY", "")
+    except Exception:  # no secrets file
+        key = ""
+    return key or os.environ.get("CFBD_API_KEY", "")
+
+
+def cfbd(path, **params):
+    """GET from CollegeFootballData, saved under data/cfbd/ so a finished season is only
+    downloaded once (the free plan allows 1,000 calls a month)."""
+    f = CFBD_DIR / f"{path.strip('/')}_{'_'.join(f'{k}{v}' for k, v in sorted(params.items()))}.json"
+    if f.exists():
+        return json.loads(f.read_text())
+    r = requests.get(CFBD + path, params=params, headers={"Authorization": f"Bearer {cfbd_key()}"}, timeout=60)
+    if r.status_code == 401:
+        raise RuntimeError("CollegeFootballData rejected the API key. Check .streamlit/secrets.toml.")
+    r.raise_for_status()
+    CFBD_DIR.mkdir(exist_ok=True)
+    f.write_text(r.text)
+    return r.json()
+
+
+def cfbd_season(season):
+    """(games, {id: (closing line, opening line)}, FBS team names) for a finished regular season.
+    CFBD uses ESPN's team and game ids, so ESPN's FPI lines up by id."""
+    raw = cfbd("/games", year=season, seasonType="regular")
+    games = pd.DataFrame([dict(id=str(g["id"]), week=g["week"], start=g["startDate"], home=g["homeTeam"],
+                               away=g["awayTeam"], home_id=str(g["homeId"]), away_id=str(g["awayId"]),
+                               home_pts=g["homePoints"], away_pts=g["awayPoints"], neutral=g["neutralSite"])
+                          for g in raw if g.get("completed") and g.get("homePoints") is not None])
+    fbs = {g[f"{s}Team"] for g in raw for s in ("home", "away") if g.get(f"{s}Classification") == "fbs"}
+    lines = {}
+    for g in cfbd("/lines", year=season, seasonType="regular"):
+        books = {b["provider"]: b for b in g.get("lines", []) if b.get("spread") is not None}
+        # prefer a book that also has the opening line
+        pick = next((books[p] for p in BOOKS if p in books and books[p].get("spreadOpen") is not None),
+                    next((books[p] for p in BOOKS if p in books), next(iter(books.values()), None)))
+        if pick:
+            lines[str(g["id"])] = (pick["spread"], pick.get("spreadOpen"))
+    return games, lines, fbs
 
 
 def grade(hist, games):
@@ -415,14 +490,25 @@ with t4:
 
     st.divider()
     st.subheader("Season backtest (walk-forward)")
-    st.caption("Replays this season from week 3: each week's FBS games are predicted using only earlier results "
-               "(points ratings refit on prior games, FPI from the previous week's snapshot) and graded against "
-               "ESPN's opening or closing line. Lines are fetched once and cached in data/closing_lines.csv. "
+    st.caption("Replays each season from week 3: each week's FBS games are predicted using only earlier results "
+               "(points ratings refit on prior games, FPI from the newest snapshot taken before the week started) and "
+               "graded against the opening or closing line. The current season uses ESPN; past seasons use "
+               "CollegeFootballData. Everything is downloaded once and cached in data/. "
                "At -110 odds you need 52.4% to break even.")
-    if st.button("▶ Run season backtest"):
+    cur = season_of(dt.date.today())
+    seasons = st.multiselect("Seasons", list(range(cur, 2020, -1)), [cur],
+                             help="Past seasons need a free CollegeFootballData key in .streamlit/secrets.toml. "
+                                  "2021 and 2022 only have a few usable weeks because ESPN overwrote most of "
+                                  "their weekly FPI snapshots.")
+    past = [y for y in seasons if y != cur]
+    if past and not cfbd_key():
+        st.warning("Past seasons need a free API key from collegefootballdata.com/key. Paste it into "
+                   "`.streamlit/secrets.toml` as `CFBD_API_KEY = \"your-key\"`, then click **Refresh now**.")
+    if st.button("▶ Run season backtest", disabled=not seasons or bool(past and not cfbd_key())):
         try:
-            with st.spinner("Fetching games, lines and weekly FPI (first run takes a minute)..."):
-                st.session_state["bt"] = season_backtest(season_of(day), hfa, dt.date.today().isoformat())
+            with st.spinner("Fetching games, lines and weekly FPI (first run takes a minute per season)..."):
+                st.session_state["bt"] = pd.concat([season_backtest(y, hfa, dt.date.today().isoformat())
+                                                    for y in sorted(seasons)], ignore_index=True)
         except Exception as ex:
             st.error(f"Couldn't run backtest: {ex}")
     res = st.session_state.get("bt")
@@ -447,11 +533,12 @@ with t4:
             st.caption("CLV (closing line value) = how far the line moved toward each pick between open and kickoff. "
                        "Beating the close consistently is the standard sign of a real edge, and it shows up in far "
                        "fewer games than win rate does. Lines that didn't move are left out of the 'moved our way' rate.")
-        weekly = res.groupby("week").apply(lambda d: score_backtest(d, min_edge, against)["hit_rate"].iloc[:3], include_groups=False)
-        st.write("Hit rate by week")
+        by = "season" if res["season"].nunique() > 1 else "week"
+        weekly = res.groupby(by).apply(lambda d: score_backtest(d, min_edge, against)["hit_rate"].iloc[:3], include_groups=False)
+        st.write(f"Hit rate by {by}")
         st.dataframe(weekly, column_config={c: pct for c in weekly.columns})
-        st.caption(f"{len(res)} games, weeks {res.week.min()}-{res.week.max()}. "
-                   "The Vegas row shows how close the line itself came to final margins, for comparison.")
+        st.caption(f"{len(res)} games across {res['season'].nunique()} season(s). "
+                   "The line (baseline) row shows how close the line itself came to final margins, for comparison.")
         with st.expander("Game-by-game"):
             st.dataframe(res, hide_index=True)
     elif res is not None:

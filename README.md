@@ -90,11 +90,13 @@ cfb_edge/
 ├── app.py                  # Streamlit dashboard
 ├── model.py                # projection, cover probability, live probability
 ├── requirements.txt
+├── .streamlit/secrets.toml # your CollegeFootballData key (git-ignored)
 └── data/
     ├── team_ratings.csv    # you edit this (also editable in the app)
     ├── history.csv         # created when you log picks; graded automatically
     ├── lines.csv           # pregame lines the app has saved
-    ├── closing_lines.csv   # opening and closing lines for finished games, fetched by the season backtest
+    ├── closing_lines.csv   # opening and closing lines for this season's finished games (season backtest)
+    ├── cfbd/               # past seasons from CollegeFootballData (git-ignored)
     └── bets.csv            # created when you save in the Bet tracker
 ```
 
@@ -112,7 +114,19 @@ cfb_edge/
 
 ## Season backtest
 
-On the **Backtest** tab, click **Run season backtest**. Starting at week 3, it predicts each week's FBS-vs-FBS games using only what was known beforehand: points ratings refit on earlier games, and ESPN's FPI snapshot from the previous week (ESPN saves one the day after each week's games). Predictions are graded against ESPN's opening or closing line (pick with **Grade against**). Both are fetched from the game summary feed once and cached in `data/closing_lines.csv`.
+On the **Backtest** tab, pick one or more **Seasons** and click **Run season backtest**. Starting at week 3, it predicts each week's FBS-vs-FBS games using only what was known beforehand: points ratings refit on earlier games, and the newest ESPN FPI snapshot taken before that week's first game. ESPN has overwritten some past seasons' weekly snapshots months later, so snapshots are picked by timestamp, and weeks with no snapshot from the previous 10 days are left out instead of being graded with stale or leaked ratings.
+
+**Past seasons (2021 on)** come from [CollegeFootballData](https://collegefootballdata.com), which needs a free API key:
+
+1. Get a key at [collegefootballdata.com/key](https://collegefootballdata.com/key).
+2. Paste it into `.streamlit/secrets.toml` as `CFBD_API_KEY = "your-key"`. You can set a `CFBD_API_KEY` environment variable instead. The file is git-ignored, so the key stays on your computer.
+3. Click **Refresh now** in the sidebar, pick the seasons and run the backtest.
+
+2021 and 2022 only have a few usable weeks each, because ESPN overwrote most of those seasons' weekly FPI snapshots. 2023 on is complete.
+
+Each past season costs two API calls the first time (games and lines), then it's cached in `data/cfbd/`. The free plan allows 1,000 calls a month. Lines come from DraftKings when available, otherwise ESPN Bet, Bovada, William Hill or the consensus line, preferring a book that also has the opening line.
+
+Predictions are graded against the opening or closing line (pick with **Grade against**). For the current season, both come from ESPN's game summary feed and are cached in `data/closing_lines.csv`.
 
 - **Opening line:** picks made when lines are first posted, which is when the market is weakest. This view adds **closing line value (CLV)**: how far the line moved toward each pick by kickoff, and how often it moved our way. Consistently beating the closing line is the standard sign of a real edge, and it shows up in far fewer games than win rate does.
 - **Closing line:** the final line at kickoff, the market's strongest.

@@ -5,3 +5,6 @@ __pycache__/
 # personal records
 data/bets.csv
 data/history.csv
+.streamlit/secrets.toml
+# CollegeFootballData downloads (cached locally, not redistributed)
+data/cfbd/
