@@ -2,13 +2,25 @@
 
 A dashboard that runs on your own computer and compares its own point-spread predictions for college football games with the Vegas betting line. It shows which side it would pick, how likely that pick is to cover before and during the game, and how well its picks have done in the past.
 
-It's free to run. Scores, lines and ESPN's team ratings come from ESPN's public data. Testing past seasons is optional and uses a free key from CollegeFootballData.com.
+It's free. Scores, lines and ESPN's team ratings come from ESPN's public data. Testing past seasons is optional and uses a free key from CollegeFootballData.com.
+
+**Two ways to use it:**
+
+| | **Website** | **App on your computer** |
+| --- | --- | --- |
+| Where | **[davischamann-alt.github.io/NCAAF-Spread-Projection](https://davischamann-alt.github.io/NCAAF-Spread-Projection/)** | Runs in your browser from your own computer |
+| Setup | None: open the link on any phone or computer | About 10 minutes ([Install and run it](#install-and-run-it)) |
+| Games, picks, live cover chances | ✅ | ✅ |
+| Ratings | Updated automatically every morning | Click **Auto-fill** to update |
+| Your picks and bets | Saved in that browser | Saved as files on your computer |
+| Run new backtests | Shows the latest results | ✅ Run any seasons and settings |
 
 > **This is an analysis tool, not betting advice.** Testing on past seasons found no source that beats the final (closing) line. The only possible edge showed up against opening lines, and it isn't proven yet. See [What the testing found](#what-the-testing-found).
 
 **Contents**
 
 1. [What it does](#what-it-does)
+   - [The website](#the-website)
 2. [Terms you'll see](#terms-youll-see)
 3. [Install and run it](#install-and-run-it)
 4. [Using it on game day](#using-it-on-game-day)
@@ -31,6 +43,19 @@ It's free to run. Scores, lines and ESPN's team ratings come from ESPN's public 
 - **Logs and grades your picks** automatically when games end.
 - **Tracks your bets,** with profit and return on investment.
 - **Tests itself on past seasons,** predicting each week with only the information available at the time.
+
+### The website
+
+Open **[davischamann-alt.github.io/NCAAF-Spread-Projection](https://davischamann-alt.github.io/NCAAF-Spread-Projection/)**. It works on phones, and you can add it to your home screen from the browser's Share menu.
+
+- **Games:** one week at a time (use ‹ › to change weeks), grouped by day. Each game card shows the line and where it opened, the model's pick, an edge badge (**Strong** 3+ points, **Lean** 1.5–3, **Small** under 1.5), and the cover chance, which updates live during games. Filter to strong edges or live games, sort by biggest edge, or search for a team.
+- **Ratings:** every FBS team's FPI and adjusted offense and defense, sortable and searchable.
+- **My picks:** tap **☆ Track pick** on a game before kickoff, and it's graded automatically when the game ends.
+- **Bets:** log bets and see your record, profit and ROI, and download or import them as CSV.
+- **Track record:** the backtest results in plain language.
+- **⚙︎ Settings:** home-field advantage, std dev (it uses the tested value for each projection automatically) and light or dark theme.
+
+Picks and bets are saved only in the browser you use, so they don't follow you between devices; use **Download as CSV** to move bets. The page gets scores and lines straight from ESPN while you have it open, and a GitHub job refreshes the ratings and track record every morning ([Publishing the website](#publishing-the-website)).
 
 ---
 
@@ -57,7 +82,7 @@ You need about 10 minutes and an internet connection. No programming is required
 
 ### 1. Install Python (one time)
 
-- **Mac:** open **Terminal** (press `Cmd + Space` and type "Terminal"), then run `python3 --version`. If it prints `Python 3.10` or higher, skip ahead. Otherwise, download the installer from [python.org/downloads](https://www.python.org/downloads/) and run it.
+- **Mac:** open **Terminal** (press `Cmd + Space` and type "Terminal"), then run `python3 --version`. If it prints `Python 3.11` or higher, skip ahead. Otherwise, download the installer from [python.org/downloads](https://www.python.org/downloads/) and run it.
 - **Windows:** download the installer from [python.org/downloads](https://www.python.org/downloads/). On the first screen of the installer, tick **"Add python.exe to PATH"**. Then open **Command Prompt** (press the Windows key and type "cmd").
 
 ### 2. Get the code (one time)
@@ -274,12 +299,29 @@ Finished games show 100% or 0% (50% for a push). Overtime counts as about two mi
 
 ---
 
+## Publishing the website
+
+The website is the `site/` folder, published free by GitHub Pages. The job in `.github/workflows/site.yml` runs every morning at 11:00 UTC, whenever the site's code changes on `main`, and when you click **Run workflow** on the repo's **Actions** tab. It runs `build_site.py` to refresh `site/data/` (ratings, Market-anchored weights, recommended std dev and track record), then publishes the site.
+
+**One-time setup** (repo owner only):
+
+1. On GitHub, open the repo's **Settings → Pages**, and under **Build and deployment → Source**, choose **GitHub Actions**.
+2. Optional, to keep the multi-season track record current: in **Settings → Secrets and variables → Actions**, add a repository secret named `CFBD_API_KEY` containing your CollegeFootballData key. Without it, the job still refreshes the ratings every day and leaves the track record as it was last built.
+
+To preview the website on your own computer, run `python build_site.py` once, then `python -m http.server 8600 --directory site`, and open **http://localhost:8600**.
+
+---
+
 ## Files
 
 ```
 NCAAF-Spread-Projection/
-├── app.py                    # the dashboard: screens, buttons, data downloads
+├── app.py                    # the computer app: screens and buttons (Streamlit)
+├── sources.py                # data downloads from ESPN and CollegeFootballData
 ├── model.py                  # the math: ratings, projections, cover chances, backtest scoring
+├── build_site.py             # builds the website's data files
+├── site/                     # the website: index.html, style.css, app.js, data/
+├── .github/workflows/site.yml # nightly job that refreshes and publishes the website
 ├── requirements.txt          # Python libraries to install
 ├── .streamlit/secrets.toml   # your CollegeFootballData key (you create it; never uploaded)
 └── data/
@@ -308,6 +350,8 @@ NCAAF-Spread-Projection/
 | A game has no pick | Read its **Note**. Usually a team name doesn't match the ratings table (run **Auto-fill**) or there's no line yet. |
 | Market-anchored shows no picks | `data/anchor_weights.json` is missing. Run the season backtest with at least one finished season from 2023 on. |
 | "Past seasons need a free API key" | Create `.streamlit/secrets.toml` as described in [Testing on past seasons](#testing-on-past-seasons), then click **Refresh now**. |
+| Website shows old ratings | Check the repo's **Actions** tab for a failed "Update and publish site" run, then click **Run workflow** to retry. |
+| Website picks or bets disappeared | They live in that browser's storage. Private/incognito windows and clearing site data erase them; download bets as CSV to keep a copy. |
 | "CollegeFootballData rejected the API key" | Check that the key in `secrets.toml` is complete, with no extra spaces, and inside the quotes. |
 
 ---

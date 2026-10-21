@@ -1,0 +1,421 @@
+{
+ "updated": "2026-10-21T16:10:06.808193+00:00",
+ "seasons": [
+  2023,
+  2024,
+  2025,
+  2026
+ ],
+ "games": 2270,
+ "tables": {
+  "open_0": [
+   {
+    "name": "Adjusted points",
+    "picks": 2239.0,
+    "wins": 1195.0,
+    "losses": 1044.0,
+    "pushes": 31.0,
+    "hit_rate": 0.5337,
+    "mae_vs_result": 12.9512,
+    "rmse_vs_result": 16.3572,
+    "mae_vs_line": 5.0783,
+    "avg_clv": 0.7949,
+    "clv_beat_rate": 0.6279
+   },
+   {
+    "name": "ESPN FPI",
+    "picks": 2239.0,
+    "wins": 1195.0,
+    "losses": 1044.0,
+    "pushes": 31.0,
+    "hit_rate": 0.5337,
+    "mae_vs_result": 12.1968,
+    "rmse_vs_result": 15.417,
+    "mae_vs_line": 2.9549,
+    "avg_clv": 0.9174,
+    "clv_beat_rate": 0.6543
+   },
+   {
+    "name": "Blend",
+    "picks": 2239.0,
+    "wins": 1202.0,
+    "losses": 1037.0,
+    "pushes": 31.0,
+    "hit_rate": 0.5368,
+    "mae_vs_result": 12.4187,
+    "rmse_vs_result": 15.6817,
+    "mae_vs_line": 3.7392,
+    "avg_clv": 0.8971,
+    "clv_beat_rate": 0.6491
+   },
+   {
+    "name": "Market-anchored",
+    "picks": 1601.0,
+    "wins": 858.0,
+    "losses": 743.0,
+    "pushes": 18.0,
+    "hit_rate": 0.5359,
+    "mae_vs_result": 12.0219,
+    "rmse_vs_result": 15.2412,
+    "mae_vs_line": 1.4441,
+    "avg_clv": 1.0788,
+    "clv_beat_rate": 0.6585
+   },
+   {
+    "name": "Opening line (baseline)",
+    "picks": null,
+    "wins": null,
+    "losses": null,
+    "pushes": null,
+    "hit_rate": null,
+    "mae_vs_result": 12.165,
+    "rmse_vs_result": 15.3823,
+    "mae_vs_line": 0.0,
+    "avg_clv": null,
+    "clv_beat_rate": null
+   }
+  ],
+  "open_2": [
+   {
+    "name": "Adjusted points",
+    "picks": 1550.0,
+    "wins": 836.0,
+    "losses": 714.0,
+    "pushes": 24.0,
+    "hit_rate": 0.5394,
+    "mae_vs_result": 12.9512,
+    "rmse_vs_result": 16.3572,
+    "mae_vs_line": 5.0783,
+    "avg_clv": 1.0877,
+    "clv_beat_rate": 0.6637
+   },
+   {
+    "name": "ESPN FPI",
+    "picks": 1255.0,
+    "wins": 691.0,
+    "losses": 564.0,
+    "pushes": 19.0,
+    "hit_rate": 0.5506,
+    "mae_vs_result": 12.1968,
+    "rmse_vs_result": 15.417,
+    "mae_vs_line": 2.9549,
+    "avg_clv": 1.458,
+    "clv_beat_rate": 0.724
+   },
+   {
+    "name": "Blend",
+    "picks": 1372.0,
+    "wins": 747.0,
+    "losses": 625.0,
+    "pushes": 23.0,
+    "hit_rate": 0.5445,
+    "mae_vs_result": 12.4187,
+    "rmse_vs_result": 15.6817,
+    "mae_vs_line": 3.7392,
+    "avg_clv": 1.2814,
+    "clv_beat_rate": 0.6913
+   },
+   {
+    "name": "Market-anchored",
+    "picks": 380.0,
+    "wins": 215.0,
+    "losses": 165.0,
+    "pushes": 3.0,
+    "hit_rate": 0.5658,
+    "mae_vs_result": 12.0219,
+    "rmse_vs_result": 15.2412,
+    "mae_vs_line": 1.4441,
+    "avg_clv": 2.812,
+    "clv_beat_rate": 0.8095
+   },
+   {
+    "name": "Opening line (baseline)",
+    "picks": null,
+    "wins": null,
+    "losses": null,
+    "pushes": null,
+    "hit_rate": null,
+    "mae_vs_result": 12.165,
+    "rmse_vs_result": 15.3823,
+    "mae_vs_line": 0.0,
+    "avg_clv": null,
+    "clv_beat_rate": null
+   }
+  ],
+  "open_3": [
+   {
+    "name": "Adjusted points",
+    "picks": 1278.0,
+    "wins": 706.0,
+    "losses": 572.0,
+    "pushes": 22.0,
+    "hit_rate": 0.5524,
+    "mae_vs_result": 12.9512,
+    "rmse_vs_result": 16.3572,
+    "mae_vs_line": 5.0783,
+    "avg_clv": 1.2104,
+    "clv_beat_rate": 0.6767
+   },
+   {
+    "name": "ESPN FPI",
+    "picks": 856.0,
+    "wins": 475.0,
+    "losses": 381.0,
+    "pushes": 12.0,
+    "hit_rate": 0.5549,
+    "mae_vs_result": 12.1968,
+    "rmse_vs_result": 15.417,
+    "mae_vs_line": 2.9549,
+    "avg_clv": 1.8076,
+    "clv_beat_rate": 0.7602
+   },
+   {
+    "name": "Blend",
+    "picks": 1048.0,
+    "wins": 575.0,
+    "losses": 473.0,
+    "pushes": 19.0,
+    "hit_rate": 0.5487,
+    "mae_vs_result": 12.4187,
+    "rmse_vs_result": 15.6817,
+    "mae_vs_line": 3.7392,
+    "avg_clv": 1.5548,
+    "clv_beat_rate": 0.7297
+   },
+   {
+    "name": "Market-anchored",
+    "picks": 168.0,
+    "wins": 100.0,
+    "losses": 68.0,
+    "pushes": 1.0,
+    "hit_rate": 0.5952,
+    "mae_vs_result": 12.0219,
+    "rmse_vs_result": 15.2412,
+    "mae_vs_line": 1.4441,
+    "avg_clv": 4.6391,
+    "clv_beat_rate": 0.8854
+   },
+   {
+    "name": "Opening line (baseline)",
+    "picks": null,
+    "wins": null,
+    "losses": null,
+    "pushes": null,
+    "hit_rate": null,
+    "mae_vs_result": 12.165,
+    "rmse_vs_result": 15.3823,
+    "mae_vs_line": 0.0,
+    "avg_clv": null,
+    "clv_beat_rate": null
+   }
+  ],
+  "close_0": [
+   {
+    "name": "Adjusted points",
+    "picks": 2226.0,
+    "wins": 1131.0,
+    "losses": 1095.0,
+    "pushes": 44.0,
+    "hit_rate": 0.5081,
+    "mae_vs_result": 12.9512,
+    "rmse_vs_result": 16.3572,
+    "mae_vs_line": 4.6947
+   },
+   {
+    "name": "ESPN FPI",
+    "picks": 2226.0,
+    "wins": 1127.0,
+    "losses": 1099.0,
+    "pushes": 44.0,
+    "hit_rate": 0.5063,
+    "mae_vs_result": 12.1968,
+    "rmse_vs_result": 15.417,
+    "mae_vs_line": 2.6414
+   },
+   {
+    "name": "Blend",
+    "picks": 2226.0,
+    "wins": 1138.0,
+    "losses": 1088.0,
+    "pushes": 44.0,
+    "hit_rate": 0.5112,
+    "mae_vs_result": 12.4187,
+    "rmse_vs_result": 15.6817,
+    "mae_vs_line": 3.3543
+   },
+   {
+    "name": "Market-anchored",
+    "picks": 1588.0,
+    "wins": 793.0,
+    "losses": 795.0,
+    "pushes": 31.0,
+    "hit_rate": 0.4994,
+    "mae_vs_result": 12.0219,
+    "rmse_vs_result": 15.2412,
+    "mae_vs_line": 1.9827
+   },
+   {
+    "name": "Closing line (baseline)",
+    "picks": null,
+    "wins": null,
+    "losses": null,
+    "pushes": null,
+    "hit_rate": null,
+    "mae_vs_result": 11.937,
+    "rmse_vs_result": 15.1441,
+    "mae_vs_line": 0.0
+   }
+  ],
+  "close_2": [
+   {
+    "name": "Adjusted points",
+    "picks": 1515.0,
+    "wins": 773.0,
+    "losses": 742.0,
+    "pushes": 30.0,
+    "hit_rate": 0.5102,
+    "mae_vs_result": 12.9512,
+    "rmse_vs_result": 16.3572,
+    "mae_vs_line": 4.6947
+   },
+   {
+    "name": "ESPN FPI",
+    "picks": 1191.0,
+    "wins": 596.0,
+    "losses": 595.0,
+    "pushes": 21.0,
+    "hit_rate": 0.5004,
+    "mae_vs_result": 12.1968,
+    "rmse_vs_result": 15.417,
+    "mae_vs_line": 2.6414
+   },
+   {
+    "name": "Blend",
+    "picks": 1343.0,
+    "wins": 681.0,
+    "losses": 662.0,
+    "pushes": 30.0,
+    "hit_rate": 0.5071,
+    "mae_vs_result": 12.4187,
+    "rmse_vs_result": 15.6817,
+    "mae_vs_line": 3.3543
+   },
+   {
+    "name": "Market-anchored",
+    "picks": 631.0,
+    "wins": 314.0,
+    "losses": 317.0,
+    "pushes": 17.0,
+    "hit_rate": 0.4976,
+    "mae_vs_result": 12.0219,
+    "rmse_vs_result": 15.2412,
+    "mae_vs_line": 1.9827
+   },
+   {
+    "name": "Closing line (baseline)",
+    "picks": null,
+    "wins": null,
+    "losses": null,
+    "pushes": null,
+    "hit_rate": null,
+    "mae_vs_result": 11.937,
+    "rmse_vs_result": 15.1441,
+    "mae_vs_line": 0.0
+   }
+  ],
+  "close_3": [
+   {
+    "name": "Adjusted points",
+    "picks": 1237.0,
+    "wins": 619.0,
+    "losses": 618.0,
+    "pushes": 24.0,
+    "hit_rate": 0.5004,
+    "mae_vs_result": 12.9512,
+    "rmse_vs_result": 16.3572,
+    "mae_vs_line": 4.6947
+   },
+   {
+    "name": "ESPN FPI",
+    "picks": 788.0,
+    "wins": 411.0,
+    "losses": 377.0,
+    "pushes": 16.0,
+    "hit_rate": 0.5216,
+    "mae_vs_result": 12.1968,
+    "rmse_vs_result": 15.417,
+    "mae_vs_line": 2.6414
+   },
+   {
+    "name": "Blend",
+    "picks": 974.0,
+    "wins": 496.0,
+    "losses": 478.0,
+    "pushes": 20.0,
+    "hit_rate": 0.5092,
+    "mae_vs_result": 12.4187,
+    "rmse_vs_result": 15.6817,
+    "mae_vs_line": 3.3543
+   },
+   {
+    "name": "Market-anchored",
+    "picks": 349.0,
+    "wins": 180.0,
+    "losses": 169.0,
+    "pushes": 9.0,
+    "hit_rate": 0.5158,
+    "mae_vs_result": 12.0219,
+    "rmse_vs_result": 15.2412,
+    "mae_vs_line": 1.9827
+   },
+   {
+    "name": "Closing line (baseline)",
+    "picks": null,
+    "wins": null,
+    "losses": null,
+    "pushes": null,
+    "hit_rate": null,
+    "mae_vs_result": 11.937,
+    "rmse_vs_result": 15.1441,
+    "mae_vs_line": 0.0
+   }
+  ]
+ },
+ "by_season": [
+  {
+   "season": 2023,
+   "games": 651,
+   "Adjusted points": 0.5188,
+   "ESPN FPI": 0.5282,
+   "Blend": 0.5266,
+   "Opening line (baseline)": null
+  },
+  {
+   "season": 2024,
+   "games": 664,
+   "Adjusted points": 0.5419,
+   "ESPN FPI": 0.5449,
+   "Blend": 0.5403,
+   "Market-anchored": 0.5373,
+   "Opening line (baseline)": null
+  },
+  {
+   "season": 2025,
+   "games": 664,
+   "Adjusted points": 0.5455,
+   "ESPN FPI": 0.5273,
+   "Blend": 0.5409,
+   "Market-anchored": 0.5333,
+   "Opening line (baseline)": null
+  },
+  {
+   "season": 2026,
+   "games": 291,
+   "Adjusted points": 0.5211,
+   "ESPN FPI": 0.5352,
+   "Blend": 0.5423,
+   "Market-anchored": 0.5387,
+   "Opening line (baseline)": null
+  }
+ ]
+}
