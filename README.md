@@ -1,166 +1,321 @@
 # 🏈 College Football Edge Dashboard
 
-A local Streamlit dashboard that compares a simple scoring model to the Vegas spread, shows how likely each pick is to cover (before and during the game), and tracks your picks, bets and model accuracy over time.
+A dashboard that runs on your own computer and compares its own point-spread predictions for college football games with the Vegas betting line. It shows which side it would pick, how likely that pick is to cover before and during the game, and how well its picks have done in the past.
 
-No API keys or paid services. Live scores, lines (current and opening, plus totals) and ESPN's FPI power ratings come from ESPN's public feeds.
+It's free to run. Scores, lines and ESPN's team ratings come from ESPN's public data. Testing past seasons is optional and uses a free key from CollegeFootballData.com.
 
-## Features
+> **This is an analysis tool, not betting advice.** Testing on past seasons found no source that beats the final (closing) line. The only possible edge showed up against opening lines, and it isn't proven yet. See [What the testing found](#what-the-testing-found).
 
-| Tab | What it does |
+**Contents**
+
+1. [What it does](#what-it-does)
+2. [Terms you'll see](#terms-youll-see)
+3. [Install and run it](#install-and-run-it)
+4. [Using it on game day](#using-it-on-game-day)
+5. [The four tabs](#the-four-tabs)
+6. [Sidebar settings](#sidebar-settings)
+7. [Testing on past seasons](#testing-on-past-seasons)
+8. [What the testing found](#what-the-testing-found)
+9. [How the model works](#how-the-model-works)
+10. [Files](#files)
+11. [Troubleshooting](#troubleshooting)
+12. [Limitations](#limitations)
+
+---
+
+## What it does
+
+- **Predicts every game's margin** (how many points the home team wins or loses by), using one of four methods you choose.
+- **Compares that prediction with the betting line** and picks the side it thinks will cover.
+- **Gives a cover chance before the game** and a live one that updates with the score and clock.
+- **Logs and grades your picks** automatically when games end.
+- **Tracks your bets,** with profit and return on investment.
+- **Tests itself on past seasons,** predicting each week with only the information available at the time.
+
+---
+
+## Terms you'll see
+
+| Term | Meaning |
 | --- | --- |
-| **Today's games** | Scores, status, current and opening line, total, projected margin, edge, the model's pick, pregame cover %, and a live cover % that updates with the score and clock. Auto-refreshes every 30 seconds. |
-| **Team ratings** | Editable table of opponent-adjusted points scored and allowed per game plus ESPN FPI for each team, with an **Auto-fill from ESPN results** button that fills it from this season's completed games. This is what drives the model. |
-| **Bet tracker** | Log your bets (date, game, side, line, odds, stake, result) and see net profit and ROI. |
-| **Backtest** | Logged picks are graded automatically when games go final, then broken out by confidence bucket (50-54%, 55-59%, and so on). A **season backtest** replays every FBS game this season against its pregame line and compares the projection sources. |
+| **Spread / line** | The betting line, shown from the home team's side. **-7** means the home team is favored by 7, and **+3** means it's a 3-point underdog. |
+| **Cover** | Win against the spread. A 7-point favorite covers by winning by more than 7. Winning by exactly 7 is a **push**, and the bet is refunded. |
+| **Projected margin** | The dashboard's prediction of home score minus away score. **+10** means the home team by 10. |
+| **Edge** | How far the projection is from the line, in points. Bigger means the model disagrees with Vegas more. |
+| **Opening line** | The first line a sportsbook posts, usually the Sunday before the game. It's the easiest line to beat. |
+| **Closing line** | The final line at kickoff, after all the betting has moved it. It's the hardest line to beat. |
+| **CLV (closing line value)** | How far the line moved toward your pick between open and kickoff. Lines that keep moving your way are the standard sign of a real edge. |
+| **Hit rate** | The share of picks that covered. At standard -110 odds, you need **52.4%** to break even. |
+| **FPI** | ESPN's Football Power Index: how many points better or worse a team is than an average FBS team on a neutral field. |
+| **FBS / FCS** | The top two divisions of college football. The dashboard rates FBS teams; FCS opponents share a single rating. |
 
-## Quick start (Mac)
+---
+
+## Install and run it
+
+You need about 10 minutes and an internet connection. No programming is required: you'll copy and paste a few commands.
+
+### 1. Install Python (one time)
+
+- **Mac:** open **Terminal** (press `Cmd + Space` and type "Terminal"), then run `python3 --version`. If it prints `Python 3.10` or higher, skip ahead. Otherwise, download the installer from [python.org/downloads](https://www.python.org/downloads/) and run it.
+- **Windows:** download the installer from [python.org/downloads](https://www.python.org/downloads/). On the first screen of the installer, tick **"Add python.exe to PATH"**. Then open **Command Prompt** (press the Windows key and type "cmd").
+
+### 2. Get the code (one time)
+
+**Option A, no tools needed:** on the [GitHub page](https://github.com/davischamann-alt/NCAAF-Spread-Projection), click the green **Code** button, then **Download ZIP**. Unzip it into your **Downloads** folder, and rename the folder to `NCAAF-Spread-Projection` if it has a different name (GitHub usually adds `-main`).
+
+**Option B, with git:**
 
 ```bash
-cd ~/Downloads/cfb_edge
+cd ~/Downloads
+git clone https://github.com/davischamann-alt/NCAAF-Spread-Projection.git
+```
+
+### 3. Set it up (one time)
+
+Run these one at a time in Terminal or Command Prompt. They create a private Python environment for the dashboard and install the three libraries it uses (Streamlit, pandas and requests).
+
+**Mac:**
+
+```bash
+cd ~/Downloads/NCAAF-Spread-Projection
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-streamlit run app.py
 ```
 
-The dashboard opens at `http://localhost:8501`. Stop it with `Ctrl + C`.
+**Windows:**
 
-Next time, you only need:
+```bat
+cd %USERPROFILE%\Downloads\NCAAF-Spread-Projection
+py -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 4. Start the dashboard (every time)
+
+**Mac:**
 
 ```bash
-cd ~/Downloads/cfb_edge
+cd ~/Downloads/NCAAF-Spread-Projection
 source venv/bin/activate
 streamlit run app.py
 ```
 
-On Windows, activate the environment with `venv\Scripts\activate` instead.
+**Windows:**
 
-## Before you rely on it
+```bat
+cd %USERPROFILE%\Downloads\NCAAF-Spread-Projection
+venv\Scripts\activate
+streamlit run app.py
+```
 
-1. **Replace the placeholder ratings.** `data/team_ratings.csv` ships with eight teams and made-up numbers. On the **Team ratings** tab, click **Auto-fill from ESPN results** to load opponent-adjusted points scored (`ppg`) and allowed (`papg`) per game and ESPN's FPI (`fpi`) for every FBS team, or type your own. Auto-fill overwrites teams it finds and keeps the rest. The league average used by the model is calculated from the teams in this file, so a short list skews the projections.
-2. **Match team names to ESPN.** Names must match the school name ESPN uses (for example `Ohio State`, `Notre Dame`). If a game shows no pick, check the name in the Game column against your CSV.
-3. **Open the app before kickoff on game day.** The app saves each game's pregame line when it first sees it. Live probabilities are measured against that line, because live odds already include the score. If you open the app after kickoff, it falls back to ESPN's current line, which makes the live % less reliable.
+Your browser opens the dashboard at **http://localhost:8501**. Leave the Terminal window open while you use it. To stop it, click the Terminal window and press `Ctrl + C`.
 
-A game only gets a pick when both teams are in the ratings file and a line is available. When a game has no pick, the **Note** column says why (for example `Add to ratings: Virginia Tech` or `No line yet`), and the line is shown whenever ESPN has one.
+The first time Streamlit runs, it may ask for an email address. You can press **Enter** to skip that. Notes suggesting a newer `pip` or installing `watchdog` are safe to ignore.
+
+---
+
+## Using it on game day
+
+1. **Refresh the ratings once a week.** On the **Team ratings** tab, click **⚡ Auto-fill from ESPN results**. It takes about a minute and updates every FBS team from the season's results. The download comes with ratings already filled in, but they go stale as the season goes on.
+2. **Open the dashboard before kickoff.** It saves each game's pregame line the first time it sees it, and the live cover chance is measured against that line. After kickoff, ESPN stops listing odds for that game.
+3. **Choose a projection source** in the sidebar. If you're unsure, use **ESPN FPI** or **Market-anchored**; see [What the testing found](#what-the-testing-found).
+4. **Read the board.** Each game shows its line, projected margin, edge, the pick and its cover chance. If a game has no pick, the **Note** column says why.
+5. **Log your picks** (optional). Click **📌 Log these pregame picks to history** before the games start, and they're graded automatically after the games finish.
+
+---
+
+## The four tabs
+
+### Today's games
+
+One row per game on the date chosen in the sidebar. It refreshes every 30 seconds.
+
+| Column | What it shows |
+| --- | --- |
+| Game, Status, Score | Matchup (away @ home), game clock and score |
+| Home line | The current line, or the saved pregame line once the game has started |
+| Open | The opening line; compare it with Home line to see how the line has moved |
+| Total | The over/under for total points |
+| Proj margin | The model's predicted home margin |
+| Edge (pts) | How far the projection is from the line |
+| Pick | The side the model picks, with its line |
+| Pregame % | The chance the pick covers, before the game |
+| Live cover % | The same chance, updated with the score and time left |
+| Note | Why a game has no pick (for example, a team missing from the ratings or no line yet) |
+
+### Team ratings
+
+A table with one row per team, which you can edit:
+
+- **ppg / papg:** points scored and allowed per game, adjusted for opponent strength.
+- **fpi:** ESPN's power rating.
+- **games:** games played.
+
+**⚡ Auto-fill from ESPN results** rebuilds the table from this season's games. Team names have to match the names ESPN uses (for example `Ohio State`, `Miami`). If you edit the table by hand, click **Save ratings**.
+
+### Bet tracker
+
+Record each bet: date, game, side, line, odds, stake and result (`W`, `L` or `Push`). Blank odds count as -110. Click **Save bets** to keep them. The tab shows the number of graded bets, net profit and ROI. Bets are stored only on your computer.
+
+### Backtest
+
+Two sections:
+
+1. **Your logged picks:** your logged picks, graded, with hit rates by confidence level (50–54%, 55–59% and so on) and by projection source.
+2. **Season backtest:** tests every projection source on whole seasons. See [Testing on past seasons](#testing-on-past-seasons).
+
+---
+
+## Sidebar settings
+
+| Setting | What it does | Default |
+| --- | --- | --- |
+| **Date** | Which day's games to show | Today |
+| **Margin std dev** | How spread out game results are around the projection; this drives the cover percentages | 14. Testing suggests about 15.5 for FPI, Market-anchored and Blend, and 16.5 for Adjusted points. |
+| **Home-field advantage** | Points given to the home team (none at neutral sites) | 2.5 |
+| **Projection source** | Which prediction method to use (see below) | Blend |
+| **Refresh now** | Reloads all data right away | — |
+| **Auto-refresh every 30s** | Keeps the scoreboard updating on its own | On |
+
+**Projection sources:**
+
+- **Adjusted points:** built from each team's points scored and allowed, adjusted for who they played.
+- **ESPN FPI:** built from ESPN's power ratings.
+- **Blend:** the average of the two.
+- **Market-anchored:** starts from the opening line and shifts it toward what FPI and the points ratings say. It makes fewer picks but tested best. It only works once the season backtest has been run on past seasons, which saves the weights it uses (`data/anchor_weights.json`). Those saved weights are included in the download, so it works right away.
+
+---
+
+## Testing on past seasons
+
+On the **Backtest** tab, choose **Seasons** and click **▶ Run season backtest**. For each week from week 3 on, it predicts the games using only what was known before that week, then grades the picks.
+
+- **The current season** works right away, using ESPN data.
+- **Past seasons (2021 on)** need a free CollegeFootballData key. Set it up once:
+  1. Get a key at [collegefootballdata.com/key](https://collegefootballdata.com/key). It arrives by email.
+  2. In the project folder, create a folder named `.streamlit`, and inside it a text file named `secrets.toml` containing:
+     ```toml
+     CFBD_API_KEY = "paste-your-key-here"
+     ```
+  3. In the dashboard, click **Refresh now**.
+
+  Keep the key private. The file is set to be left out of git, so it won't be uploaded to GitHub. Each past season uses two API calls the first time and is then saved in `data/cfbd/`; the free plan allows 1,000 calls a month.
+
+**Reading the results:**
+
+- **Grade against:**
+  - **Opening line:** picks made when lines are first posted. This view adds **CLV** columns showing how often the line moved toward the pick.
+  - **Closing line:** the final line at kickoff, which is the tougher test.
+- **Only bet when edge is at least:** counts only picks where the model disagrees with the line by at least this many points.
+- **hit_rate:** the share of picks that covered. Compare it with 52.4%.
+- **RMSE vs result:** the typical miss in points. Use it for the **Margin std dev** setting.
+- **line (baseline):** how close the line itself came to the final scores, for comparison.
+- **Market-anchored** predicts each season using only weights learned from earlier seasons you selected, so the first season you select has no Market-anchored picks.
+
+2021 and 2022 have only a few usable weeks each, because ESPN overwrote most of those seasons' weekly FPI ratings later. 2023 onward is the most reliable.
+
+---
+
+## What the testing found
+
+These results are from 2023–2026 (through week 7 of 2026), about 2,270 games. Market-anchored was tested on 2024–2026 because 2023 was its training data.
+
+| Picks made at the… | Result |
+| --- | --- |
+| **Closing line** | No source beats it: about 50–51% for every source, below break-even. |
+| **Opening line, every game** | About 53.5% for every source, just above the 52.4% break-even. |
+| **Opening line, edge 3+ points** | FPI 55.6% (855 picks), Adjusted points 55.3% (1,277 picks), Market-anchored **59.5% (168 picks)**. |
+| **Line movement** | After the open, lines moved toward the model's picks 60–67% of the time, and 89% of the time for Market-anchored with a 3+ point edge. |
+
+**What this means:**
+
+- **The Vegas closing line is more accurate than any of these sources.** Betting near kickoff shows no edge.
+- **Any edge comes from betting early, right after opening lines are posted, and only on large disagreements.** Lines kept moving toward the picks, which is the most encouraging sign.
+- **It isn't proven.** Even the best result is about two standard errors above break-even, and some sportsbooks post opening lines before the ESPN ratings used here were updated. Opening lines also have low betting limits.
+- **Adjusted points adds little on top of FPI.** Market-anchored gives it about a tenth of the weight.
+
+---
 
 ## How the model works
 
-**Ratings.** Auto-fill fits every completed game this season at once: each team's points = league average + its offense rating + the opponent's defense rating, with home field estimated too (ridge regression, so teams with few games are pulled toward average). That way 40 points against a top defense counts for more than 40 against a weak one. FCS opponents share a single "FCS" rating. `ppg` and `papg` are those ratings on the normal points scale.
+**Adjusted points ratings.** Every completed game this season is fitted at once: a team's points scored = league average + its offense rating + its opponent's defense rating ± home field. That way 40 points against a strong defense counts for more than 40 against a weak one. Teams with few games are pulled toward average (ridge regression), and all FCS opponents share one rating. `ppg` and `papg` are those ratings on the normal points scale.
 
-**FPI.** ESPN's Football Power Index is the expected margin against an average FBS team on a neutral field. The FPI projection is `home.fpi - away.fpi + HFA` (no HFA at neutral sites). FPI includes preseason priors, so it's steadier than scoring data early in the season.
-
-**Projection source** (sidebar): *Adjusted points* uses the formula below, *ESPN FPI* uses the FPI projection, and *Blend* (default) averages the two, using whichever one exists when a team lacks the other. Logged picks record which source they came from, and the Backtest tab breaks results out by source.
-
-**Market-anchored** starts from the betting line instead of competing with it:
+**Projected margin**, by source:
 
 ```
-projected margin = const + w_line x (-opening home line) + w_fpi x FPI margin + w_pts x points margin
+Adjusted points:  (home.ppg + away.papg) - (away.ppg + home.papg) + HFA
+ESPN FPI:         home.fpi - away.fpi + HFA
+Blend:            average of the two
+Market-anchored:  const + w_line x (-opening home line) + w_fpi x FPI margin + w_pts x points margin
 ```
 
-The weights are learned by regression on past seasons' backtest results, so the line does most of the work and the ratings only nudge it where they disagree. Learned from 2023-2025, they come out to about 0.57 x line, 0.39 x FPI and 0.12 x adjusted points. Edges are smaller and rarer than the other sources', so the **min edge** filter matters more. It uses the opening line when ESPN has one, since that's what it was trained on, and otherwise the saved pregame line. Running the season backtest with at least one finished season from 2023 on saves the weights to `data/anchor_weights.json`, which the main board uses; until then this source shows no picks.
+There's no home-field advantage (HFA) at neutral sites. The Market-anchored weights are learned by regression on past seasons. Learned from 2023–2025, they come out to about 0.57 × line, 0.39 × FPI and 0.12 × adjusted points.
 
-**Points projection.** Each team's expected points are its own scoring plus the opponent's points allowed, minus the league average, with a home-field bump (split between the two teams, none at neutral sites):
-
-```
-home_pts = home.ppg + away.papg - league_avg + HFA/2
-away_pts = away.ppg + home.papg - league_avg - HFA/2
-projected margin = home_pts - away_pts
-```
-
-**Pregame cover probability.** The margin is treated as a normal distribution around the projection. The line is from the home team's view, so a negative number means the home team is favored.
+**Pregame cover chance.** The final margin is treated as a bell curve around the projection, with spread equal to the **Margin std dev** setting (sigma):
 
 ```
-P(home covers) = Normal CDF( (projected margin + home line) / sigma )
-edge (pts)     = |projected margin + home line|
+P(home covers) = NormalCDF( (projected margin + home line) / sigma )
+edge           = | projected margin + home line |
 ```
 
-**Live cover probability.** As the game goes on, the expected final margin is the current margin plus the projected margin scaled by the share of the game left, and the uncertainty shrinks with the square root of the time left.
+**Live cover chance.** During a game, the expected final margin is the current margin plus the share of the projection still to be played, and the uncertainty shrinks as time runs out:
 
 ```
 expected final margin = current margin + projected margin x (time left / 60 min)
-sigma_live            = sigma x sqrt(time left / 60 min)
+live sigma            = sigma x sqrt(time left / 60 min)
 ```
 
-Final games resolve to 100% or 0% (50% on a push). Overtime is treated as roughly two minutes left.
+Finished games show 100% or 0% (50% for a push). Overtime counts as about two minutes left.
 
-## Settings (sidebar)
+**Avoiding look-ahead in the backtest.** Each week's ratings use only earlier games. FPI comes from the newest ESPN snapshot taken before that week's first game, and weeks with no snapshot from the previous 10 days are skipped, because ESPN overwrote some old snapshots with later data.
 
-- **Date:** which day's games to show.
-- **Margin std dev:** spread of game outcomes around the projection (default 14 points).
-- **Home-field advantage:** points added for the home team (default 2.5).
-- **Projection source:** Blend, Adjusted points, ESPN FPI, or Market-anchored (see above).
-- **Refresh now / Auto-refresh:** clear the cache and reload, or toggle the 30-second refresh.
+---
 
 ## Files
 
 ```
-cfb_edge/
-├── app.py                  # Streamlit dashboard
-├── model.py                # projection, cover probability, live probability
-├── requirements.txt
-├── .streamlit/secrets.toml # your CollegeFootballData key (git-ignored)
+NCAAF-Spread-Projection/
+├── app.py                    # the dashboard: screens, buttons, data downloads
+├── model.py                  # the math: ratings, projections, cover chances, backtest scoring
+├── requirements.txt          # Python libraries to install
+├── .streamlit/secrets.toml   # your CollegeFootballData key (you create it; never uploaded)
 └── data/
-    ├── team_ratings.csv    # you edit this (also editable in the app)
-    ├── history.csv         # created when you log picks; graded automatically
-    ├── lines.csv           # pregame lines the app has saved
-    ├── anchor_weights.json # Market-anchored weights, saved by the season backtest
-    ├── closing_lines.csv   # opening and closing lines for this season's finished games (season backtest)
-    ├── cfbd/               # past seasons from CollegeFootballData (git-ignored)
-    └── bets.csv            # created when you save in the Bet tracker
+    ├── team_ratings.csv      # team ratings (Auto-fill or edit by hand)
+    ├── lines.csv             # pregame lines the dashboard has saved
+    ├── closing_lines.csv     # this season's opening and closing lines (backtest)
+    ├── anchor_weights.json   # Market-anchored weights (saved by the backtest)
+    ├── history.csv           # your logged picks (created when you log; kept private)
+    ├── bets.csv              # your bets (created when you save; kept private)
+    └── cfbd/                 # past seasons' data (downloaded; kept private)
 ```
 
-## Logging and backtesting
+"Kept private" means the file is listed in `.gitignore`, so git won't upload it to GitHub.
 
-1. On the **Today's games** tab, click **Log these pregame picks to history** before the games start. Only pregame picks are logged, so mid-game picks don't skew the results.
-2. Keep the app running after games finish, or reopen it later and pick that game day in the sidebar. Logged picks are graded automatically as covered (Y), not covered (N) or push.
-3. Open the **Backtest** tab to see the overall hit rate and the hit rate by confidence bucket. Reload the page to pick up newly graded results.
-
-## Bet tracker notes
-
-- Results are `W`, `L` or `Push`. Blank odds default to -110.
-- Winnings use American odds: a win at -110 on a 110 stake pays 100.
-- Click **Save bets** to write your changes to `data/bets.csv`.
-
-## Season backtest
-
-On the **Backtest** tab, pick one or more **Seasons** and click **Run season backtest**. Starting at week 3, it predicts each week's FBS-vs-FBS games using only what was known beforehand: points ratings refit on earlier games, and the newest ESPN FPI snapshot taken before that week's first game. ESPN has overwritten some past seasons' weekly snapshots months later, so snapshots are picked by timestamp, and weeks with no snapshot from the previous 10 days are left out instead of being graded with stale or leaked ratings.
-
-**Past seasons (2021 on)** come from [CollegeFootballData](https://collegefootballdata.com), which needs a free API key:
-
-1. Get a key at [collegefootballdata.com/key](https://collegefootballdata.com/key).
-2. Paste it into `.streamlit/secrets.toml` as `CFBD_API_KEY = "your-key"`. You can set a `CFBD_API_KEY` environment variable instead. The file is git-ignored, so the key stays on your computer.
-3. Click **Refresh now** in the sidebar, pick the seasons and run the backtest.
-
-In the backtest, Market-anchored predicts each season with weights from earlier selected seasons only (2023 on), so the first selected season has no Market-anchored picks.
-
-2021 and 2022 only have a few usable weeks each, because ESPN overwrote most of those seasons' weekly FPI snapshots. 2023 on is complete.
-
-Each past season costs two API calls the first time (games and lines), then it's cached in `data/cfbd/`. The free plan allows 1,000 calls a month. Lines come from DraftKings when available, otherwise ESPN Bet, Bovada, William Hill or the consensus line, preferring a book that also has the opening line.
-
-Predictions are graded against the opening or closing line (pick with **Grade against**). For the current season, both come from ESPN's game summary feed and are cached in `data/closing_lines.csv`.
-
-- **Opening line:** picks made when lines are first posted, which is when the market is weakest. This view adds **closing line value (CLV)**: how far the line moved toward each pick by kickoff, and how often it moved our way. Consistently beating the closing line is the standard sign of a real edge, and it shows up in far fewer games than win rate does.
-- **Closing line:** the final line at kickoff, the market's strongest.
-
-The table shows each source's against-the-spread record and hit rate, plus how far its projections landed from the final margin. The **line (baseline)** row shows how close the line itself came. Use the slider to bet only when the edge is at least a given number of points. At -110 odds you need 52.4% to break even. **RMSE vs result** is the value to use for the margin std dev setting with that source.
-
-## Limitations
-
-- The points model only uses final scores. It doesn't account for injuries, weather, pace or line movement (the Open column shows movement but the model doesn't use it).
-- FPI comes from an unofficial ESPN endpoint and may change or disappear; the points model keeps working without it.
-- ESPN's feed is unofficial and may change, rate-limit you, or omit lines for some games.
-- Backtest results need a decent sample before they mean much.
-- This is an analysis tool, not betting advice, and a high cover probability is not a guarantee.
-
-## Ideas for next steps
-
-- Pull team stats from the CFBD API instead of typing them in.
-- Replace the formula with logistic regression or gradient boosting and compare them in the backtest.
-- Add rest and injury adjustments.
+---
 
 ## Troubleshooting
 
-- **`streamlit: command not found`:** activate the environment with `source venv/bin/activate`.
-- **"Couldn't load scores":** check your internet connection and click **Refresh now**.
-- **No games or no picks:** confirm the date, then check that both team names exist in `team_ratings.csv`.
-- **Browser didn't open:** go to `http://localhost:8501` manually.
+| Problem | Fix |
+| --- | --- |
+| `streamlit: command not found` or `No module named streamlit` | You're outside the environment. Run the `source venv/bin/activate` (Mac) or `venv\Scripts\activate` (Windows) line from [step 4](#4-start-the-dashboard-every-time) first. |
+| `python3: command not found` (Mac) or `'py' is not recognized` (Windows) | Python isn't installed, or on Windows "Add python.exe to PATH" wasn't ticked. Reinstall it from [python.org](https://www.python.org/downloads/). |
+| Browser didn't open | Go to **http://localhost:8501** yourself. |
+| "Couldn't load scores" | Check your internet connection and click **Refresh now**. ESPN's feed sometimes has short outages. |
+| No games listed | Check the **Date** in the sidebar. |
+| A game has no pick | Read its **Note**. Usually a team name doesn't match the ratings table (run **Auto-fill**) or there's no line yet. |
+| Market-anchored shows no picks | `data/anchor_weights.json` is missing. Run the season backtest with at least one finished season from 2023 on. |
+| "Past seasons need a free API key" | Create `.streamlit/secrets.toml` as described in [Testing on past seasons](#testing-on-past-seasons), then click **Refresh now**. |
+| "CollegeFootballData rejected the API key" | Check that the key in `secrets.toml` is complete, with no extra spaces, and inside the quotes. |
+
+---
+
+## Limitations
+
+- **Scores and ratings only.** The model doesn't know about injuries, weather, suspensions or motivation.
+- **Unofficial data.** ESPN's feeds aren't official and could change or go down without notice.
+- **Lines differ by sportsbook.** Lines come from one book per game (DraftKings when available), so yours may differ.
+- **Small samples mislead.** A few weeks of results can look great or terrible by luck alone. Judge by hundreds of picks and by line movement.
+- **No guarantees.** A high cover percentage is still not a sure thing.
