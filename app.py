@@ -9,12 +9,13 @@ import pandas as pd
 import requests
 import streamlit as st
 
-from model import (cover_prob, fit_ratings, fpi_margin, live_cover_prob, load_ratings, pool_fcs, project,
-                   score_backtest, walk_forward)
+from model import (add_anchored, anchored_margin, cover_prob, fit_anchor, fit_ratings, fpi_margin, live_cover_prob,
+                   load_ratings, pool_fcs, project, score_backtest, walk_forward)
 
 DATA = Path(__file__).parent / "data"
 RATINGS, HISTORY, BETS = DATA / "team_ratings.csv", DATA / "history.csv", DATA / "bets.csv"
 CLOSING = DATA / "closing_lines.csv"
+ANCHOR = DATA / "anchor_weights.json"
 CFBD_DIR = DATA / "cfbd"
 CFBD = "https://api.collegefootballdata.com"
 # sportsbooks to take lines from, in order of preference (CFBD's provider names)
@@ -296,14 +297,17 @@ st.title("🏈 College Football Edge Dashboard")
 day = st.sidebar.date_input("Date", dt.date.today())
 sigma = st.sidebar.slider("Margin std dev (pts)", 10.0, 20.0, 14.0, 0.5)
 hfa = st.sidebar.slider("Home-field advantage (pts)", 0.0, 5.0, 2.5, 0.5)
-SOURCES = ["Blend (points + FPI)", "Adjusted points", "ESPN FPI"]
+SOURCES = ["Blend (points + FPI)", "Adjusted points", "ESPN FPI", "Market-anchored"]
 source = st.sidebar.radio("Projection source", SOURCES,
-                          help="Blend averages the two when both are available and falls back to whichever one is.")
+                          help="Blend averages points and FPI when both are available and falls back to whichever one "
+                               "is. Market-anchored starts from the opening line and shifts it by FPI and points, with "
+                               "weights learned in the season backtest.")
 if st.sidebar.button("Refresh now"):
     st.cache_data.clear()
 auto = st.sidebar.checkbox("Auto-refresh every 30s", True)
 
 ratings = load_ratings(RATINGS)
+anchor = json.loads(ANCHOR.read_text()) if ANCHOR.exists() else None
 COLS = ["Game", "Status", "Score", "Home line", "Open", "Total", "Proj margin", "Edge (pts)", "Pick", "Pregame %", "Live cover %", "Note"]
 
 
@@ -329,7 +333,7 @@ def sync_history(games):
     return h
 
 
-def proj_margin(g):
+def proj_margin(g, line):
     p = project(g.home, g.away, ratings, g.neutral, hfa)
     pts = None if p is None else p[0] - p[1]
     fpi = fpi_margin(g.home, g.away, ratings, g.neutral, hfa)
@@ -337,6 +341,12 @@ def proj_margin(g):
         return pts
     if source == "ESPN FPI":
         return fpi
+    if source == "Market-anchored":
+        # trained on opening lines, so anchor on the opener and fall back to the pregame line
+        base = g.open_line if pd.notna(g.open_line) else line
+        if anchor is None or pts is None or fpi is None or pd.isna(base):
+            return None
+        return anchored_margin(anchor["weights"], base, fpi, pts)
     both = [m for m in (pts, fpi) if m is not None]
     return sum(both) / len(both) if both else None
 
@@ -366,7 +376,7 @@ def live_board():
         row = {"Game": f"{g.away} @ {g.home}", "Status": g.status, "Score": f"{g.away_score}-{g.home_score}",
                "Home line": line if pd.notna(line) else None,
                "Open": g.open_line if pd.notna(g.open_line) else None, "Total": g.total if pd.notna(g.total) else None}
-        margin = proj_margin(g)
+        margin = proj_margin(g, line)
         if margin is not None and pd.notna(line):
             pre = cover_prob(margin, line, sigma)
             live = live_cover_prob(g.home_score - g.away_score, margin, line, secs_left(g), sigma)
@@ -382,8 +392,10 @@ def live_board():
         else:
             missing = [t for t in (g.home, g.away) if t not in ratings.index]
             notes = ["Add to ratings: " + ", ".join(missing)] if missing else []
-            if not missing and source == "ESPN FPI":
+            if not missing and source in ("ESPN FPI", "Market-anchored"):
                 notes.append("No FPI for a team (try Auto-fill or another source)")
+            if source == "Market-anchored" and anchor is None:
+                notes.append("Run the season backtest with past seasons to train Market-anchored")
             if pd.isna(line):
                 notes.append("No line yet" if g.state == "pre" else "No pregame line saved")
             row["Note"] = " · ".join(notes)
@@ -507,8 +519,14 @@ with t4:
     if st.button("▶ Run season backtest", disabled=not seasons or bool(past and not cfbd_key())):
         try:
             with st.spinner("Fetching games, lines and weekly FPI (first run takes a minute per season)..."):
-                st.session_state["bt"] = pd.concat([season_backtest(y, hfa, dt.date.today().isoformat())
-                                                    for y in sorted(seasons)], ignore_index=True)
+                res = add_anchored(pd.concat([season_backtest(y, hfa, dt.date.today().isoformat())
+                                              for y in sorted(seasons)], ignore_index=True))
+                st.session_state["bt"] = res
+                done = sorted(y for y in seasons if 2023 <= y < cur)
+                if done:  # weights for the live board, from every finished season run here
+                    w = fit_anchor(res[res["season"].isin(done)])
+                    ANCHOR.write_text(json.dumps({"weights": w, "seasons": done, "hfa": hfa}))
+                    anchor = json.loads(ANCHOR.read_text())
         except Exception as ex:
             st.error(f"Couldn't run backtest: {ex}")
     res = st.session_state.get("bt")
@@ -534,11 +552,19 @@ with t4:
                        "Beating the close consistently is the standard sign of a real edge, and it shows up in far "
                        "fewer games than win rate does. Lines that didn't move are left out of the 'moved our way' rate.")
         by = "season" if res["season"].nunique() > 1 else "week"
-        weekly = res.groupby(by).apply(lambda d: score_backtest(d, min_edge, against)["hit_rate"].iloc[:3], include_groups=False)
+        names = score_backtest(res, min_edge, against).index[:-1]
+        weekly = res.groupby(by).apply(lambda d: score_backtest(d, min_edge, against)["hit_rate"].reindex(names),
+                                       include_groups=False)
         st.write(f"Hit rate by {by}")
         st.dataframe(weekly, column_config={c: pct for c in weekly.columns})
         st.caption(f"{len(res)} games across {res['season'].nunique()} season(s). "
                    "The line (baseline) row shows how close the line itself came to final margins, for comparison.")
+        if anchor:
+            w = anchor["weights"]
+            st.caption(f"Market-anchored weights (learned from {', '.join(map(str, anchor['seasons']))}): "
+                       f"{w['line']:.2f} x opening line + {w['fpi']:.2f} x FPI + {w['points']:.2f} x adjusted points "
+                       f"{w['const']:+.2f}. In the table above, each season is predicted with weights from earlier "
+                       "selected seasons only (2023 on), so include earlier seasons to see it.")
         with st.expander("Game-by-game"):
             st.dataframe(res, hide_index=True)
     elif res is not None:

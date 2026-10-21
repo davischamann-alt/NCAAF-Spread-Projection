@@ -51,6 +51,14 @@ A game only gets a pick when both teams are in the ratings file and a line is av
 
 **Projection source** (sidebar): *Adjusted points* uses the formula below, *ESPN FPI* uses the FPI projection, and *Blend* (default) averages the two, using whichever one exists when a team lacks the other. Logged picks record which source they came from, and the Backtest tab breaks results out by source.
 
+**Market-anchored** starts from the betting line instead of competing with it:
+
+```
+projected margin = const + w_line x (-opening home line) + w_fpi x FPI margin + w_pts x points margin
+```
+
+The weights are learned by regression on past seasons' backtest results, so the line does most of the work and the ratings only nudge it where they disagree. Learned from 2023-2025, they come out to about 0.57 x line, 0.39 x FPI and 0.12 x adjusted points. Edges are smaller and rarer than the other sources', so the **min edge** filter matters more. It uses the opening line when ESPN has one, since that's what it was trained on, and otherwise the saved pregame line. Running the season backtest with at least one finished season from 2023 on saves the weights to `data/anchor_weights.json`, which the main board uses; until then this source shows no picks.
+
 **Points projection.** Each team's expected points are its own scoring plus the opponent's points allowed, minus the league average, with a home-field bump (split between the two teams, none at neutral sites):
 
 ```
@@ -80,7 +88,7 @@ Final games resolve to 100% or 0% (50% on a push). Overtime is treated as roughl
 - **Date:** which day's games to show.
 - **Margin std dev:** spread of game outcomes around the projection (default 14 points).
 - **Home-field advantage:** points added for the home team (default 2.5).
-- **Projection source:** Blend, Adjusted points, or ESPN FPI (see above).
+- **Projection source:** Blend, Adjusted points, ESPN FPI, or Market-anchored (see above).
 - **Refresh now / Auto-refresh:** clear the cache and reload, or toggle the 30-second refresh.
 
 ## Files
@@ -95,6 +103,7 @@ cfb_edge/
     ├── team_ratings.csv    # you edit this (also editable in the app)
     ├── history.csv         # created when you log picks; graded automatically
     ├── lines.csv           # pregame lines the app has saved
+    ├── anchor_weights.json # Market-anchored weights, saved by the season backtest
     ├── closing_lines.csv   # opening and closing lines for this season's finished games (season backtest)
     ├── cfbd/               # past seasons from CollegeFootballData (git-ignored)
     └── bets.csv            # created when you save in the Bet tracker
@@ -121,6 +130,8 @@ On the **Backtest** tab, pick one or more **Seasons** and click **Run season bac
 1. Get a key at [collegefootballdata.com/key](https://collegefootballdata.com/key).
 2. Paste it into `.streamlit/secrets.toml` as `CFBD_API_KEY = "your-key"`. You can set a `CFBD_API_KEY` environment variable instead. The file is git-ignored, so the key stays on your computer.
 3. Click **Refresh now** in the sidebar, pick the seasons and run the backtest.
+
+In the backtest, Market-anchored predicts each season with weights from earlier selected seasons only (2023 on), so the first selected season has no Market-anchored picks.
 
 2021 and 2022 only have a few usable weeks each, because ESPN overwrote most of those seasons' weekly FPI snapshots. 2023 on is complete.
 

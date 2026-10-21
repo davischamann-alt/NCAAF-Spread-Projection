@@ -104,6 +104,38 @@ def walk_forward(games, lines, fpi_by_week, fbs, hfa=2.5, start_week=3):
     return pd.DataFrame(rows)
 
 
+ANCHOR_FEATURES = ["const", "line", "fpi", "points"]
+
+
+def fit_anchor(res):
+    """Weights for the market-anchored projection: final margin regressed on the opening line
+    (as a home margin), FPI and adjusted points, by least squares on backtest rows. The line
+    does most of the work; the ratings only shift it where they disagree."""
+    d = res.dropna(subset=["open_line", "fpi", "points"])
+    X = np.column_stack([np.ones(len(d)), -d["open_line"], d["fpi"], d["points"]])
+    return dict(zip(ANCHOR_FEATURES, np.linalg.lstsq(X, d["final_margin"], rcond=None)[0].round(4)))
+
+
+def anchored_margin(w, home_line, fpi, pts):
+    """Projected home margin from fit_anchor weights; home_line is the (opening) home spread."""
+    return w["const"] - w["line"] * home_line + w["fpi"] * fpi + w["points"] * pts
+
+
+def add_anchored(res, first_train_season=2023):
+    """Adds an "anchored" column, each season predicted with weights fit only on earlier seasons
+    in res (from first_train_season on). Seasons with no earlier season to learn from get NaN."""
+    res = res.copy()
+    res["anchored"] = np.nan
+    for s in sorted(res["season"].unique()):
+        train = res[(res["season"] < s) & (res["season"] >= first_train_season)]
+        if train["open_line"].notna().sum() < 200:
+            continue
+        w, m = fit_anchor(train), res["season"] == s
+        res.loc[m, "anchored"] = anchored_margin(w, res.loc[m, "open_line"].fillna(res.loc[m, "line"]),
+                                                 res.loc[m, "fpi"], res.loc[m, "points"])
+    return res
+
+
 def score_backtest(res, min_edge=0.0, against="close"):
     """Per-source against-the-spread record and accuracy. against="open" grades picks made at the
     opening line and adds closing line value (CLV): how far the line moved toward the pick by
@@ -113,8 +145,11 @@ def score_backtest(res, min_edge=0.0, against="close"):
     col_line = "open_line" if against == "open" else "line"
     res = res.dropna(subset=[col_line])
     out = []
-    for name, col in (("Adjusted points", "points"), ("ESPN FPI", "fpi"), ("Blend", "blend")):
-        edge = res[col] + res[col_line]
+    sources = [("Adjusted points", "points"), ("ESPN FPI", "fpi"), ("Blend", "blend")]
+    if "anchored" in res.columns and res["anchored"].notna().any():
+        sources.append(("Market-anchored", "anchored"))
+    for name, col in sources:
+        edge = res[col] + res[col_line]  # NaN for games a source has no projection for: never picked
         pick = res[edge.abs() >= min_edge]
         side = np.sign(edge[pick.index])
         ats = (pick["final_margin"] + pick[col_line]) * side
