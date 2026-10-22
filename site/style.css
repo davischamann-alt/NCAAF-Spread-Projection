@@ -207,15 +207,6 @@ table.data button { border: 0; background: none; color: var(--muted); cursor: po
 .cards .card .big { font-size: 22px; font-weight: 700; }
 .cards .card p { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
 
-/* Run your own backtest */
-.bt-panel p:first-child { margin-top: 0; }
-.bt-panel ol { padding-left: 20px; margin: 8px 0 12px; }
-.bt-panel li { margin-bottom: 4px; }
-.key-form { display: flex; gap: 8px; flex-wrap: wrap; }
-.key-form input { flex: 1; min-width: 200px; height: 36px; padding: 0 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
-#bt-run:disabled { opacity: .6; cursor: progress; }
-#bt-results { margin-top: 12px; }
-
 /* Forms, buttons, dialog */
 .form h3 { margin-top: 0; }
 .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 12px; }

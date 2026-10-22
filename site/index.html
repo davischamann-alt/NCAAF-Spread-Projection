@@ -176,59 +176,6 @@
           line moved toward the pick between the open and kickoff, which is the standard sign of a real edge. Market-anchored
           learns its weights from earlier seasons only, so its first season isn't graded. This is analysis, not betting advice.</p>
       </details>
-
-      <h2 class="section-head">Run your own backtest <span>with a free CollegeFootballData key</span></h2>
-      <div class="card bt-panel">
-        <div id="bt-key-row">
-          <p>Replay any seasons yourself, right in this page. Past seasons' games and betting lines come from
-            CollegeFootballData, which needs a free key:</p>
-          <ol>
-            <li>Go to <a href="https://collegefootballdata.com/key" target="_blank" rel="noopener">collegefootballdata.com/key</a>,
-              enter your email, and copy the key from the email it sends you.</li>
-            <li>Paste it here and click <b>Save key</b>.</li>
-          </ol>
-          <form id="bt-key-form" class="key-form">
-            <input id="bt-key" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your key" aria-label="CollegeFootballData API key">
-            <button class="primary" type="submit">Save key</button>
-          </form>
-          <p class="note">🔒 Your key is saved only in this browser and is sent only to CollegeFootballData, never to this
-            site or anyone else. You can remove it anytime.</p>
-        </div>
-        <div id="bt-ready" hidden>
-          <p class="note"><span id="bt-key-status"></span> <button class="link" id="bt-forget" type="button">Remove key</button></p>
-          <div class="controls">
-            <div class="field wide">
-              <span>Seasons (2023 on is most reliable)</span>
-              <div class="chips" id="bt-seasons"></div>
-            </div>
-          </div>
-          <button class="primary" id="bt-run" type="button">Run backtest</button>
-          <p class="note" id="bt-progress" aria-live="polite"></p>
-          <div id="bt-results" hidden>
-            <div class="controls">
-              <div class="field wide">
-                <span>Picks made at the</span>
-                <div class="chips" id="bt-against">
-                  <button data-v="open" class="on" type="button">Opening line</button>
-                  <button data-v="close" type="button">Closing line</button>
-                </div>
-              </div>
-              <div class="field wide">
-                <span>Only when the edge is at least</span>
-                <div class="chips" id="bt-edge">
-                  <button data-v="0" class="on" type="button">Any</button>
-                  <button data-v="2" type="button">2 pts</button>
-                  <button data-v="3" type="button">3 pts</button>
-                </div>
-              </div>
-            </div>
-            <p class="summary" id="bt-summary"></p>
-            <div class="table-wrap"><table id="bt-table" class="data"></table></div>
-            <p class="note">Uses the home-field advantage from ⚙︎ Settings. Each season costs two CollegeFootballData calls
-              the first time; finished seasons are then saved in this browser.</p>
-          </div>
-        </div>
-      </div>
     </section>
   </main>
 
@@ -252,6 +199,5 @@
   </dialog>
 
   <script src="app.js"></script>
-  <script src="backtest.js"></script>
 </body>
 </html>
