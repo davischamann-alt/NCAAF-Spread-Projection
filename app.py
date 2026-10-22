@@ -100,8 +100,8 @@ def proj_margin(g, line):
     if source == "ESPN FPI":
         return fpi
     if source == "Market-anchored":
-        # trained on opening lines, so anchor on the opener and fall back to the pregame line
-        base = g.open_line if pd.notna(g.open_line) else line
+        # start from the line being bet (current, or the saved pregame line once started)
+        base = line
         if anchor is None or pts is None or fpi is None or pd.isna(base):
             return None
         return anchored_margin(anchor["weights"], base, fpi, pts)

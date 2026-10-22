@@ -254,20 +254,43 @@ def cfbd_season(season):
     return games, lines, fbs
 
 
-def scoreboard(date_str):
-    r = requests.get(ESPN, params={"dates": date_str, "groups": 80, "limit": 200}, timeout=10)
-    r.raise_for_status()
+def parse_events(events):
+    """One row per game from ESPN scoreboard events."""
     rows = []
-    for e in r.json().get("events", []):
+    for e in events:
         c = e["competitions"][0]
         t = {x["homeAway"]: x for x in c["competitors"]}
         h, a = t["home"], t["away"]
         line, open_line, total = parse_odds(c.get("odds") or [], h["team"].get("abbreviation"))
         rows.append(dict(
-            id=e["id"], home=h["team"]["location"], away=a["team"]["location"],
+            id=e["id"], kickoff=e["date"], home=h["team"]["location"], away=a["team"]["location"],
             home_id=h["team"]["id"], away_id=a["team"]["id"],
             home_score=int(h.get("score") or 0), away_score=int(a.get("score") or 0),
             status=c["status"]["type"]["shortDetail"], state=c["status"]["type"]["state"],
             neutral=c.get("neutralSite", False), line=line, open_line=open_line, total=total,
             period=c["status"].get("period", 0), clock=float(c["status"].get("clock") or 0)))
-    return pd.DataFrame(rows)
+    return pd.DataFrame(rows, columns=["id", "kickoff", "home", "away", "home_id", "away_id", "home_score",
+                                       "away_score", "status", "state", "neutral", "line", "open_line", "total",
+                                       "period", "clock"])
+
+
+def scoreboard(date_str):
+    r = requests.get(ESPN, params={"dates": date_str, "groups": 80, "limit": 200}, timeout=10)
+    r.raise_for_status()
+    return parse_events(r.json().get("events", []))
+
+
+def week_scoreboard(season=None, seasontype=None, week=None):
+    """(games, info) for one week; with no arguments, ESPN's current week. info has the season,
+    season type and week of the games returned, plus ESPN's calendar of weeks."""
+    params = {"groups": 80, "limit": 300}
+    if week is not None:
+        params.update(dates=season, seasontype=seasontype, week=week)
+    r = requests.get(ESPN, params=params, timeout=20)
+    r.raise_for_status()
+    j = r.json()
+    cal = [(int(c["value"]), int(x["value"])) for c in j.get("leagues", [{}])[0].get("calendar", [])
+           if c.get("value") in ("2", "3") for x in c.get("entries", [])]
+    info = dict(season=j["season"]["year"], seasontype=j["season"]["type"], week=j.get("week", {}).get("number"),
+                calendar=cal)
+    return parse_events(j.get("events", [])), info

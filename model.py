@@ -121,6 +121,23 @@ def anchored_margin(w, home_line, fpi, pts):
     return w["const"] - w["line"] * home_line + w["fpi"] * fpi + w["points"] * pts
 
 
+def projections(home, away, r, neutral, hfa, line, anchor_weights):
+    """Projected home margin from every source, None where a source can't make one. The same
+    math as projections() in site/app.js. Market-anchored starts from the line being bet (the
+    current line, or the pregame line once a game has started): it was tested by starting from
+    the opening line and grading against that same line, and starting from an older line than
+    the one being bet would count the line's own movement as edge."""
+    p = project(home, away, r, neutral, hfa)
+    pts = None if p is None else p[0] - p[1]
+    fpi = fpi_margin(home, away, r, neutral, hfa)
+    both = [m for m in (pts, fpi) if m is not None]
+    base = line
+    anchored = None
+    if anchor_weights and pts is not None and fpi is not None and base is not None and not pd.isna(base):
+        anchored = anchored_margin(anchor_weights, base, fpi, pts)
+    return {"points": pts, "fpi": fpi, "blend": sum(both) / len(both) if both else None, "anchored": anchored}
+
+
 def add_anchored(res, first_train_season=2023):
     """Adds an "anchored" column, each season predicted with weights fit only on earlier seasons
     in res (from first_train_season on). Seasons with no earlier season to learn from get NaN."""

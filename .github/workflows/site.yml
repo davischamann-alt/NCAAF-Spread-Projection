@@ -1,18 +1,19 @@
-# Rebuilds the website's data (ratings, model settings, track record) and publishes the site to
-# GitHub Pages. Runs every morning, whenever site code changes on main, and on demand from the
-# Actions tab ("Run workflow").
+# Every two hours: records lines and the model's picks before kickoff (the forward test) and
+# commits them, so git history proves when each pick was made; then rebuilds the website's data
+# (ratings, model settings, track record) and publishes the site to GitHub Pages. Also runs when
+# site code changes on main, and on demand from the Actions tab ("Run workflow").
 name: Update and publish site
 
 on:
   schedule:
-    - cron: "0 11 * * *"   # 11:00 UTC = 7 AM Eastern (6 AM in winter)
+    - cron: "17 */2 * * *"   # every two hours, at 17 minutes past (GitHub is busiest on the hour)
   push:
     branches: [main]
-    paths: ["site/**", "build_site.py", "sources.py", "model.py", ".github/workflows/site.yml"]
+    paths: ["site/**", "build_site.py", "record.py", "sources.py", "model.py", ".github/workflows/site.yml"]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write   # to commit the pick log
   pages: write
   id-token: write
 
@@ -25,6 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -35,6 +38,21 @@ jobs:
         with:
           path: data/cfbd
           key: cfbd-v1
+      # Recorded first, so a problem in the steps after it can't lose a pick
+      - name: Record lines and picks
+        run: python record.py
+      - name: Commit the pick log
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/live site/data/live.json
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Record lines and picks $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep 10
+          done
+          exit 1
       - name: Build site data
         env:
           # Optional: add a CFBD_API_KEY repository secret to include past seasons in the track record

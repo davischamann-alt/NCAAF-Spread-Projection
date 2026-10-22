@@ -122,6 +122,32 @@
 
     <!-- Track record -->
     <section id="tab-record" class="tab" hidden>
+      <h2 class="section-head">Live results <span>picks recorded before kickoff</span></h2>
+      <p class="note" id="live-intro"></p>
+      <div class="controls">
+        <div class="field wide">
+          <span>Projection</span>
+          <div class="chips" id="live-source">
+            <button data-v="anchored" class="on">Market-anchored</button>
+            <button data-v="fpi">ESPN FPI</button>
+            <button data-v="blend">Blend</button>
+            <button data-v="points">Adjusted points</button>
+          </div>
+        </div>
+        <div class="field wide">
+          <span>Edge</span>
+          <div class="chips" id="live-tier">
+            <button data-v="all">Every game</button>
+            <button data-v="lean">1.5+ pts</button>
+            <button data-v="strong" class="on">3+ pts</button>
+          </div>
+        </div>
+      </div>
+      <div class="stats" id="live-stats"></div>
+      <h3>Recent Market-anchored picks (edge 1.5+)</h3>
+      <div class="table-wrap scroll"><table id="live-table" class="data"></table></div>
+
+      <h2 class="section-head">Backtest <span>past seasons, replayed week by week</span></h2>
       <div id="record-headline" class="cards"></div>
       <div class="controls">
         <div class="field wide">

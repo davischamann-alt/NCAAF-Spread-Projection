@@ -22,6 +22,7 @@ const state = {
   ratings: null,        // {byId, list, updated, season}
   model: null,          // {hfa, anchor, sigma}
   record: null,         // track_record.json
+  live: null,           // live.json: the forward test (record.py)
   calendar: [],         // [{label, detail, week, seasontype, start, end}]
   weekIndex: -1,
   season: null,
@@ -77,7 +78,7 @@ function projections(g) {
   const both = [points, fpi].filter((x) => x != null);
   const blend = both.length ? both.reduce((s, x) => s + x, 0) / both.length : null;
   const w = state.model?.anchor?.weights;
-  const base = g.openLine ?? g.line;
+  const base = g.line;  // start from the line being bet, as tested (see model.projections)
   const anchored = w && points != null && fpi != null && base != null
     ? w.const - w.line * base + w.fpi * fpi + w.points * points : null;
   return { points, fpi, blend, anchored };
@@ -484,6 +485,49 @@ function renderRecord() {
       `<td class="${s[n] == null ? "" : s[n] >= BREAKEVEN ? "good" : "bad"}">${s[n] == null ? "—" : pct(s[n], 1)}</td>`).join("")}</tr>`).join("");
 }
 
+// ---------- Live results (forward test) ----------
+
+let liveSource = "anchored", liveTier = "strong";
+
+/** Link to the pick log's history on GitHub, which shows when each pick was committed. */
+function proofLink() {
+  const m = location.hostname.match(/^([^.]+)\.github\.io$/);
+  const repo = location.pathname.split("/").filter(Boolean)[0];
+  return m && repo ? `https://github.com/${m[1]}/${repo}/commits/main/data/live/picks.csv` : null;
+}
+
+function renderLive() {
+  const L = state.live;
+  if (!L || !L.games) {
+    $("#live-intro").textContent = "No live picks recorded yet. They start appearing once lines are posted.";
+    $("#live-stats").innerHTML = ""; $("#live-table").innerHTML = "";
+    return;
+  }
+  const since = new Date(L.since).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" });
+  const proof = proofLink();
+  $("#live-intro").innerHTML = `Since ${esc(since)}, every game's pick has been saved the first time its line appeared, at that line,
+    and never changed afterward (${L.games} games so far). This is the real test: unlike the backtest below, these picks were made
+    before anyone knew the results.${proof ? ` <a href="${proof}" target="_blank" rel="noopener">See when each pick was recorded</a>.` : ""}`;
+  const s = L.summary.find((x) => x.key === liveSource && x.tier === liveTier);
+  const rec = (r) => `${r.wins}-${r.losses}${r.pushes ? "-" + r.pushes : ""}`;
+  const graded = s.at_logged.wins + s.at_logged.losses + s.at_logged.pushes;
+  $("#live-stats").innerHTML = [
+    ["Picks", s.picks, `${s.pending} still to play`],
+    ["Record at the line we logged", rec(s.at_logged), graded ? `${pct(s.at_logged.hit_rate, 1)} · break-even 52.4%` : "No games finished yet"],
+    ["Record at the closing line", rec(s.at_close), s.at_close.hit_rate == null ? "" : pct(s.at_close.hit_rate, 1)],
+    ["Line moved our way", pct(s.clv_beat_rate), s.avg_clv == null ? "" : `avg ${s.avg_clv >= 0 ? "+" : ""}${s.avg_clv.toFixed(2)} pts`],
+  ].map(([k, v, sub]) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="k">${esc(sub)}</div></div>`).join("");
+  const res = { W: `<span class="badge win">Won</span>`, L: `<span class="badge loss">Lost</span>`, P: `<span class="badge pass">Push</span>` };
+  $("#live-table").innerHTML = `<tr><th>Kickoff</th><th class="l">Game</th><th class="l">Pick</th><th>Edge</th><th>Line moved</th><th class="l">Result</th></tr>` +
+    (L.recent.length ? L.recent.map((p) => `<tr>
+      <td>${esc(new Date(p.kickoff).toLocaleDateString(undefined, { month: "short", day: "numeric" }))}</td>
+      <td class="l">${esc(p.game)}</td><td class="l"><b>${esc(p.team)} ${fmtLine(p.line)}</b></td>
+      <td><span class="badge ${p.tier}">${p.edge.toFixed(1)}</span></td>
+      <td class="${p.clv > 0 ? "good" : p.clv < 0 ? "bad" : ""}">${p.clv == null ? "—" : (p.clv > 0 ? "+" : "") + p.clv}</td>
+      <td class="l">${p.result ? res[p.result] : `<span class="note">Pending</span>`}</td></tr>`).join("")
+      : `<tr><td colspan="6" class="empty">No picks with an edge yet.</td></tr>`);
+}
+
 // ---------- Wiring ----------
 
 function renderAll() { renderWeekbar(); renderGames(); renderPicks(); renderBets(); }
@@ -575,9 +619,11 @@ function bind() {
   });
 
   $("#rating-search").addEventListener("input", renderRatings);
-  for (const [id, setter] of [["#rec-against", (v) => (recAgainst = v)], ["#rec-edge", (v) => (recEdge = v)]]) {
+  for (const [id, setter, render] of [["#rec-against", (v) => (recAgainst = v), renderRecord],
+    ["#rec-edge", (v) => (recEdge = v), renderRecord], ["#live-source", (v) => (liveSource = v), renderLive],
+    ["#live-tier", (v) => (liveTier = v), renderLive]]) {
     $$(`${id} button`).forEach((b) => b.addEventListener("click", () => {
-      $$(`${id} button`).forEach((x) => x.classList.toggle("on", x === b)); setter(b.dataset.v); renderRecord();
+      $$(`${id} button`).forEach((x) => x.classList.toggle("on", x === b)); setter(b.dataset.v); render();
     }));
   }
 
@@ -596,13 +642,15 @@ function bind() {
 async function init() {
   applyTheme();
   bind();
-  const [ratings, model, record] = await Promise.all(
-    ["ratings", "model", "track_record"].map((n) => getJSON(`data/${n}.json`).catch(() => null)));
+  const [ratings, model, record, live] = await Promise.all(
+    ["ratings", "model", "track_record", "live"].map((n) => getJSON(`data/${n}.json`).catch(() => null)));
   if (ratings) state.ratings = { ...ratings, list: ratings.teams, byId: Object.fromEntries(ratings.teams.map((t) => [String(t.id), t])) };
   state.model = model;
   state.record = record;
+  state.live = live;
   renderRatings();
   renderRecord();
+  renderLive();
   await refresh(-1);
 }
 

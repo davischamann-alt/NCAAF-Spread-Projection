@@ -1,0 +1,559 @@
+{
+ "updated": "2026-10-22T02:31Z",
+ "since": "2026-10-22T02:29Z",
+ "games": 64,
+ "summary": [
+  {
+   "source": "Market-anchored",
+   "key": "anchored",
+   "tier": "all",
+   "label": "Every game",
+   "picks": 64,
+   "pending": 64,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "Market-anchored",
+   "key": "anchored",
+   "tier": "lean",
+   "label": "Edge 1.5+",
+   "picks": 22,
+   "pending": 22,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "Market-anchored",
+   "key": "anchored",
+   "tier": "strong",
+   "label": "Edge 3+",
+   "picks": 5,
+   "pending": 5,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "ESPN FPI",
+   "key": "fpi",
+   "tier": "all",
+   "label": "Every game",
+   "picks": 64,
+   "pending": 64,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "ESPN FPI",
+   "key": "fpi",
+   "tier": "lean",
+   "label": "Edge 1.5+",
+   "picks": 39,
+   "pending": 39,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "ESPN FPI",
+   "key": "fpi",
+   "tier": "strong",
+   "label": "Edge 3+",
+   "picks": 25,
+   "pending": 25,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "Blend",
+   "key": "blend",
+   "tier": "all",
+   "label": "Every game",
+   "picks": 64,
+   "pending": 64,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "Blend",
+   "key": "blend",
+   "tier": "lean",
+   "label": "Edge 1.5+",
+   "picks": 35,
+   "pending": 35,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "Blend",
+   "key": "blend",
+   "tier": "strong",
+   "label": "Edge 3+",
+   "picks": 18,
+   "pending": 18,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "Adjusted points",
+   "key": "points",
+   "tier": "all",
+   "label": "Every game",
+   "picks": 64,
+   "pending": 64,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "Adjusted points",
+   "key": "points",
+   "tier": "lean",
+   "label": "Edge 1.5+",
+   "picks": 49,
+   "pending": 49,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  },
+  {
+   "source": "Adjusted points",
+   "key": "points",
+   "tier": "strong",
+   "label": "Edge 3+",
+   "picks": 28,
+   "pending": 28,
+   "at_logged": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "at_close": {
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "hit_rate": null
+   },
+   "avg_clv": null,
+   "clv_beat_rate": null
+  }
+ ],
+ "recent": [
+  {
+   "id": "401858509",
+   "kickoff": "2026-10-31T23:30Z",
+   "game": "Ohio State @ USC",
+   "side": "away",
+   "team": "Ohio State",
+   "line": -7.0,
+   "edge": 2.11,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401858501",
+   "kickoff": "2026-10-31T19:30Z",
+   "game": "Minnesota @ Indiana",
+   "side": "home",
+   "team": "Indiana",
+   "line": -22.5,
+   "edge": 3.6,
+   "tier": "strong",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401856843",
+   "kickoff": "2026-10-31T19:30Z",
+   "game": "Arizona State @ BYU",
+   "side": "home",
+   "team": "BYU",
+   "line": -17.5,
+   "edge": 2.81,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401856842",
+   "kickoff": "2026-10-31T16:00Z",
+   "game": "Arizona @ Texas Tech",
+   "side": "home",
+   "team": "Texas Tech",
+   "line": -7.5,
+   "edge": 2.02,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401859185",
+   "kickoff": "2026-10-31T16:00Z",
+   "game": "Notre Dame @ Navy",
+   "side": "away",
+   "team": "Notre Dame",
+   "line": -28.5,
+   "edge": 3.22,
+   "tier": "strong",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401864527",
+   "kickoff": "2026-10-25T02:00Z",
+   "game": "North Dakota State @ New Mexico",
+   "side": "home",
+   "team": "New Mexico",
+   "line": -4.5,
+   "edge": 3.35,
+   "tier": "strong",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401862811",
+   "kickoff": "2026-10-25T00:00Z",
+   "game": "UTSA @ Tulane",
+   "side": "home",
+   "team": "Tulane",
+   "line": 2.5,
+   "edge": 2.78,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401856729",
+   "kickoff": "2026-10-24T23:30Z",
+   "game": "Vanderbilt @ Kentucky",
+   "side": "home",
+   "team": "Kentucky",
+   "line": -10.5,
+   "edge": 3.03,
+   "tier": "strong",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401856732",
+   "kickoff": "2026-10-24T23:30Z",
+   "game": "Ole Miss @ Texas",
+   "side": "home",
+   "team": "Texas",
+   "line": -3.5,
+   "edge": 1.87,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401860907",
+   "kickoff": "2026-10-24T22:00Z",
+   "game": "Boise State @ Washington State",
+   "side": "away",
+   "team": "Boise State",
+   "line": -13.5,
+   "edge": 2.25,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401871094",
+   "kickoff": "2026-10-24T20:00Z",
+   "game": "UL Monroe @ Troy",
+   "side": "home",
+   "team": "Troy",
+   "line": -14.0,
+   "edge": 3.41,
+   "tier": "strong",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401856839",
+   "kickoff": "2026-10-24T19:45Z",
+   "game": "Kansas State @ Arizona State",
+   "side": "away",
+   "team": "Kansas State",
+   "line": -2.5,
+   "edge": 2.14,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401866448",
+   "kickoff": "2026-10-24T19:30Z",
+   "game": "Bowling Green @ Buffalo",
+   "side": "home",
+   "team": "Buffalo",
+   "line": -3.0,
+   "edge": 2.4,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401856730",
+   "kickoff": "2026-10-24T19:30Z",
+   "game": "Oklahoma @ Mississippi State",
+   "side": "home",
+   "team": "Mississippi State",
+   "line": 4.5,
+   "edge": 1.79,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401858497",
+   "kickoff": "2026-10-24T19:30Z",
+   "game": "Iowa @ Minnesota",
+   "side": "away",
+   "team": "Iowa",
+   "line": -6.5,
+   "edge": 2.02,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401856731",
+   "kickoff": "2026-10-24T19:30Z",
+   "game": "Tennessee @ South Carolina",
+   "side": "away",
+   "team": "Tennessee",
+   "line": 2.5,
+   "edge": 2.8,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401858495",
+   "kickoff": "2026-10-24T19:00Z",
+   "game": "Oregon @ Illinois",
+   "side": "away",
+   "team": "Oregon",
+   "line": -8.5,
+   "edge": 2.26,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401858498",
+   "kickoff": "2026-10-24T16:00Z",
+   "game": "Rutgers @ Northwestern",
+   "side": "home",
+   "team": "Northwestern",
+   "line": -16.5,
+   "edge": 1.87,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401858496",
+   "kickoff": "2026-10-24T16:00Z",
+   "game": "Indiana @ Michigan",
+   "side": "away",
+   "team": "Indiana",
+   "line": -7.0,
+   "edge": 2.9,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401858272",
+   "kickoff": "2026-10-24T02:30Z",
+   "game": "NC State @ Stanford",
+   "side": "away",
+   "team": "NC State",
+   "line": -6.5,
+   "edge": 2.31,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401864525",
+   "kickoff": "2026-10-24T01:00Z",
+   "game": "Air Force @ Wyoming",
+   "side": "away",
+   "team": "Air Force",
+   "line": -5.5,
+   "edge": 2.7,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  },
+  {
+   "id": "401869845",
+   "kickoff": "2026-10-22T23:00Z",
+   "game": "James Madison @ App State",
+   "side": "away",
+   "team": "James Madison",
+   "line": -10.5,
+   "edge": 2.35,
+   "tier": "lean",
+   "logged_at": "2026-10-22T02:29Z",
+   "result": null,
+   "clv": null
+  }
+ ]
+}

@@ -19,8 +19,7 @@ It's free. Scores, lines and ESPN's team ratings come from ESPN's public data. T
 
 **Contents**
 
-1. [What it does](#what-it-does)
-   - [The website](#the-website)
+1. [What it does](#what-it-does) and [the website](#the-website)
 2. [Terms you'll see](#terms-youll-see)
 3. [Install and run it](#install-and-run-it)
 4. [Using it on game day](#using-it-on-game-day)
@@ -28,10 +27,12 @@ It's free. Scores, lines and ESPN's team ratings come from ESPN's public data. T
 6. [Sidebar settings](#sidebar-settings)
 7. [Testing on past seasons](#testing-on-past-seasons)
 8. [What the testing found](#what-the-testing-found)
-9. [How the model works](#how-the-model-works)
-10. [Files](#files)
-11. [Troubleshooting](#troubleshooting)
-12. [Limitations](#limitations)
+9. [The forward test](#the-forward-test)
+10. [How the model works](#how-the-model-works)
+11. [Publishing the website](#publishing-the-website)
+12. [Files](#files)
+13. [Troubleshooting](#troubleshooting)
+14. [Limitations](#limitations)
 
 ---
 
@@ -52,7 +53,7 @@ Open **[davischamann-alt.github.io/NCAAF-Spread-Projection](https://davischamann
 - **Ratings:** every FBS team's FPI and adjusted offense and defense, sortable and searchable.
 - **My picks:** tap **☆ Track pick** on a game before kickoff, and it's graded automatically when the game ends.
 - **Bets:** log bets and see your record, profit and ROI, and download or import them as CSV.
-- **Track record:** the backtest results in plain language.
+- **Track record:** live results of picks recorded before kickoff ([The forward test](#the-forward-test)), then the backtest results in plain language.
 - **⚙︎ Settings:** home-field advantage, std dev (it uses the tested value for each projection automatically) and light or dark theme.
 
 Picks and bets are saved only in the browser you use, so they don't follow you between devices; use **Download as CSV** to move bets. The page gets scores and lines straight from ESPN while you have it open, and a GitHub job refreshes the ratings and track record every morning ([Publishing the website](#publishing-the-website)).
@@ -210,7 +211,7 @@ Two sections:
 - **Adjusted points:** built from each team's points scored and allowed, adjusted for who they played.
 - **ESPN FPI:** built from ESPN's power ratings.
 - **Blend:** the average of the two.
-- **Market-anchored:** starts from the opening line and shifts it toward what FPI and the points ratings say. It makes fewer picks but tested best. It only works once the season backtest has been run on past seasons, which saves the weights it uses (`data/anchor_weights.json`). Those saved weights are included in the download, so it works right away.
+- **Market-anchored:** starts from the current betting line and shifts it toward what FPI and the points ratings say. It makes fewer picks but tested best. It only works once the season backtest has been run on past seasons, which saves the weights it uses (`data/anchor_weights.json`). Those saved weights are included in the download, so it works right away.
 
 ---
 
@@ -264,6 +265,23 @@ These results are from 2023–2026 (through week 7 of 2026), about 2,270 games. 
 
 ---
 
+## The forward test
+
+The backtest replays past seasons, and some of its biases can't be fully ruled out (see the caveats above). The forward test can't have those biases: it records picks **before** the games are played.
+
+Every two hours, the GitHub job runs `record.py`, which:
+
+1. **Records lines:** saves each game's line whenever it changes, with the time, to `data/live/line_history.csv`. This builds a record of how lines move through the week.
+2. **Logs picks:** the first time a game has a line, saves every projection's pick at that line to `data/live/picks.csv`. Those columns are never changed afterward. Since the job checks every two hours, picks are logged within about two hours of the opening line.
+3. **Grades picks:** after kickoff, fills in the closing line, the result at the logged line, the result at the closing line and the CLV (how far the line moved toward the pick).
+4. **Commits** both files to the repository. Git history then shows exactly when each pick was recorded, which proves it was made before the game.
+
+The website's **Track record** tab shows the results by projection and edge size, with a link to that history. Watch two numbers: the record at the logged line, and how often the line moved our way. A few hundred strong-edge picks are needed before the record means much.
+
+The log started on October 21, 2026, partway through week 8, so some of that week's games were logged after their lines had already moved. Everything from week 9 on is logged close to the open.
+
+---
+
 ## How the model works
 
 **Adjusted points ratings.** Every completed game this season is fitted at once: a team's points scored = league average + its offense rating + its opponent's defense rating ± home field. That way 40 points against a strong defense counts for more than 40 against a weak one. Teams with few games are pulled toward average (ridge regression), and all FCS opponents share one rating. `ppg` and `papg` are those ratings on the normal points scale.
@@ -274,10 +292,10 @@ These results are from 2023–2026 (through week 7 of 2026), about 2,270 games. 
 Adjusted points:  (home.ppg + away.papg) - (away.ppg + home.papg) + HFA
 ESPN FPI:         home.fpi - away.fpi + HFA
 Blend:            average of the two
-Market-anchored:  const + w_line x (-opening home line) + w_fpi x FPI margin + w_pts x points margin
+Market-anchored:  const + w_line x (-home line) + w_fpi x FPI margin + w_pts x points margin
 ```
 
-There's no home-field advantage (HFA) at neutral sites. The Market-anchored weights are learned by regression on past seasons. Learned from 2023–2025, they come out to about 0.57 × line, 0.39 × FPI and 0.12 × adjusted points.
+There's no home-field advantage (HFA) at neutral sites. Market-anchored starts from the line you'd be betting: the current line, or the pregame line once a game has started. In the backtest it started from the opening line and was graded against that same line. Starting from an older line than the one being bet would count the line's own movement as edge. The weights are learned by regression on past seasons. Learned from 2023–2025, they come out to about 0.57 × line, 0.39 × FPI and 0.12 × adjusted points.
 
 **Pregame cover chance.** The final margin is treated as a bell curve around the projection, with spread equal to the **Margin std dev** setting (sigma):
 
@@ -301,7 +319,9 @@ Finished games show 100% or 0% (50% for a push). Overtime counts as about two mi
 
 ## Publishing the website
 
-The website is the `site/` folder, published free by GitHub Pages. The job in `.github/workflows/site.yml` runs every morning at 11:00 UTC, whenever the site's code changes on `main`, and when you click **Run workflow** on the repo's **Actions** tab. It runs `build_site.py` to refresh `site/data/` (ratings, Market-anchored weights, recommended std dev and track record), then publishes the site.
+The website is the `site/` folder, published free by GitHub Pages. The job in `.github/workflows/site.yml` runs every two hours, whenever the site's code changes on `main`, and when you click **Run workflow** on the repo's **Actions** tab. Each run records lines and picks ([The forward test](#the-forward-test)) and commits them, then runs `build_site.py` to refresh `site/data/` (ratings, Market-anchored weights, recommended std dev and track record), and publishes the site.
+
+Because the job commits to `main` every two hours, your copy falls behind quickly. Run `git pull` before you change anything, or your push will be rejected.
 
 **One-time setup** (repo owner only):
 
@@ -320,6 +340,7 @@ NCAAF-Spread-Projection/
 ├── sources.py                # data downloads from ESPN and CollegeFootballData
 ├── model.py                  # the math: ratings, projections, cover chances, backtest scoring
 ├── build_site.py             # builds the website's data files
+├── record.py                 # forward test: records lines and picks, grades them
 ├── site/                     # the website: index.html, style.css, app.js, data/
 ├── .github/workflows/site.yml # nightly job that refreshes and publishes the website
 ├── requirements.txt          # Python libraries to install
@@ -329,6 +350,7 @@ NCAAF-Spread-Projection/
     ├── lines.csv             # pregame lines the dashboard has saved
     ├── closing_lines.csv     # this season's opening and closing lines (backtest)
     ├── anchor_weights.json   # Market-anchored weights (saved by the backtest)
+    ├── live/                 # forward test: line_history.csv and picks.csv (written by the GitHub job)
     ├── history.csv           # your logged picks (created when you log; kept private)
     ├── bets.csv              # your bets (created when you save; kept private)
     └── cfbd/                 # past seasons' data (downloaded; kept private)
