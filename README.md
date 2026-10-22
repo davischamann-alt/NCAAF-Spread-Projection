@@ -13,7 +13,7 @@ It's free. Scores, lines and ESPN's team ratings come from ESPN's public data. T
 | Games, picks, live cover chances | ✅ | ✅ |
 | Ratings | Updated automatically every morning | Click **Auto-fill** to update |
 | Your picks and bets | Saved in that browser | Saved as files on your computer |
-| Run new backtests | Shows the latest results | ✅ Run any seasons and settings |
+| Run new backtests | ✅ With your own free CollegeFootballData key, in the page | ✅ Run any seasons and settings |
 
 > **This is an analysis tool, not betting advice.** Testing on past seasons found no source that beats the final (closing) line. The only possible edge showed up against opening lines, and it isn't proven yet. See [What the testing found](#what-the-testing-found).
 
@@ -53,7 +53,7 @@ Open **[davischamann-alt.github.io/NCAAF-Spread-Projection](https://davischamann
 - **Ratings:** every FBS team's FPI and adjusted offense and defense, sortable and searchable.
 - **My picks:** tap **☆ Track pick** on a game before kickoff, and it's graded automatically when the game ends.
 - **Bets:** log bets and see your record, profit and ROI, and download or import them as CSV.
-- **Track record:** live results of picks recorded before kickoff ([The forward test](#the-forward-test)), then the backtest results in plain language.
+- **Track record:** live results of picks recorded before kickoff ([The forward test](#the-forward-test)), then the backtest results in plain language. At the bottom, **Run your own backtest** lets anyone replay seasons in the page with their own free CollegeFootballData key ([below](#testing-on-past-seasons)).
 - **⚙︎ Settings:** home-field advantage, std dev (it uses the tested value for each projection automatically) and light or dark theme.
 
 Picks and bets are saved only in the browser you use, so they don't follow you between devices; use **Download as CSV** to move bets. The page gets scores and lines straight from ESPN while you have it open, and a GitHub job refreshes the ratings and track record every morning ([Publishing the website](#publishing-the-website)).
@@ -217,7 +217,9 @@ Two sections:
 
 ## Testing on past seasons
 
-On the **Backtest** tab, choose **Seasons** and click **▶ Run season backtest**. For each week from week 3 on, it predicts the games using only what was known before that week, then grades the picks.
+**On the website:** open **Track record** and scroll to **Run your own backtest**. Follow the two steps there to get a free key from [collegefootballdata.com/key](https://collegefootballdata.com/key) and paste it in. The key is saved only in your browser and sent only to CollegeFootballData. Then pick seasons and click **Run backtest**. It runs in your browser in a few seconds and gives the same results as the computer app. Finished seasons are saved in your browser, so running them again doesn't use your monthly calls. **Remove key** deletes the key from the browser.
+
+**In the computer app:** on the **Backtest** tab, choose **Seasons** and click **▶ Run season backtest**. For each week from week 3 on, it predicts the games using only what was known before that week, then grades the picks.
 
 - **The current season** works right away, using ESPN data.
 - **Past seasons (2021 on)** need a free CollegeFootballData key. Set it up once:
@@ -341,7 +343,7 @@ NCAAF-Spread-Projection/
 ├── model.py                  # the math: ratings, projections, cover chances, backtest scoring
 ├── build_site.py             # builds the website's data files
 ├── record.py                 # forward test: records lines and picks, grades them
-├── site/                     # the website: index.html, style.css, app.js, data/
+├── site/                     # the website: index.html, style.css, app.js, backtest.js, data/
 ├── .github/workflows/site.yml # nightly job that refreshes and publishes the website
 ├── requirements.txt          # Python libraries to install
 ├── .streamlit/secrets.toml   # your CollegeFootballData key (you create it; never uploaded)
