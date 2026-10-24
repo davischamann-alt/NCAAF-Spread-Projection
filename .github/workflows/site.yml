@@ -48,7 +48,7 @@ jobs:
           # Commit only when the line history or pick log changed; on its own,
           # live.json just has a new timestamp
           git diff --quiet -- data/live && exit 0
-          git add data/live site/data/live.json
+          git add data/live site/data/live.json site/data/game_log.json
           git commit -q -m "Record lines and picks $(date -u +%Y-%m-%dT%H:%MZ)"
           for i in 1 2 3; do
             git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0

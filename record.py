@@ -9,6 +9,8 @@ Writes three files:
                               has a line and never changed after; closing line and result are
                               filled in later
   site/data/live.json         the summary the website's Track record tab shows
+  site/data/game_log.json     each recent game's line history and logged picks, for the website's
+                              game detail view
 
 Because the job commits these files to git each run, the repository history proves every pick
 was recorded before its game started."""
@@ -24,6 +26,7 @@ from model import projections
 LIVE = sources.DATA / "live"
 LINES, PICKS = LIVE / "line_history.csv", LIVE / "picks.csv"
 SITE_LIVE = sources.DATA.parent / "site" / "data" / "live.json"
+SITE_GAMES = sources.DATA.parent / "site" / "data" / "game_log.json"
 HFA = 2.5
 STRONG, LEAN = 3.0, 1.5
 SOURCES = {"anchored": "Market-anchored", "fpi": "ESPN FPI", "blend": "Blend", "points": "Adjusted points"}
@@ -148,6 +151,25 @@ def summary(picks, now):
                 summary=rows, recent=recent)
 
 
+def game_log(picks, days=21):
+    """{game id: line history and logged picks} for games from the last few weeks and upcoming ones."""
+    cutoff = pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=days)
+    hist = load(LINES, LINE_COLS)
+    hist = hist[pd.to_datetime(hist.kickoff, utc=True) >= cutoff]
+    out = {gid: {"lines": [[r.seen_at, r.line, None if pd.isna(r.total) else r.total] for r in g.itertuples()]}
+           for gid, g in hist.groupby("id")}
+    recent = picks[pd.to_datetime(picks.kickoff, utc=True) >= cutoff]
+    for gid, g in recent.groupby("id"):
+        first = g.iloc[0]
+        out.setdefault(gid, {"lines": []})["logged"] = dict(
+            at=first.logged_at, line=first.line_logged, close=None if pd.isna(first.close_line) else first.close_line,
+            final_margin=None if pd.isna(first.final_margin) else first.final_margin,
+            picks={p.source: dict(margin=p.margin, edge=p.edge, side=p.side, tier=p.tier,
+                                  result=None if pd.isna(p.result_logged) else p.result_logged,
+                                  clv=None if pd.isna(p.clv) else p.clv) for p in g.itertuples()})
+    return out
+
+
 def main():
     LIVE.mkdir(parents=True, exist_ok=True)
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
@@ -163,6 +185,7 @@ def main():
     picks.to_csv(PICKS, index=False)
 
     SITE_LIVE.write_text(json.dumps(clean(summary(picks, now)), indent=1))
+    SITE_GAMES.write_text(json.dumps(clean(game_log(picks)), separators=(",", ":")))
     graded = picks.drop_duplicates("id").result_logged.notna().sum()
     print(f"{n_lines} line changes, {n_new} new games logged, {graded} of {picks.id.nunique()} games graded")
 

@@ -76,8 +76,15 @@
           <li><b>Edge</b> is how many points the model disagrees with the line by. It's labeled like a fourth-down call: <span class="badge strong">Go for it</span> is 3+ points, <span class="badge lean">Lean</span> is 1.5–3, and <span class="badge pass">Punt</span> is less, meaning no bet.</li>
           <li><b>Cover chance</b> is the model's chance the pick covers. During a game it updates with the score and clock. The yellow tick on the bar marks 52.4%, the break-even point at standard -110 odds.</li>
           <li>The <b>Track</b> button saves a pick to <b>My picks</b>, where it's graded automatically when the game ends.</li>
+          <li><b>Tap a game</b> for the full breakdown: what every projection says, how the line has moved, the matchup, weather, and how the game played out.</li>
         </ul>
       </details>
+    </section>
+
+    <!-- Game detail (game.js), at #game/<id> -->
+    <section id="tab-game" class="tab" hidden>
+      <button class="link gd-back" type="button" onclick="history.length > 1 ? history.back() : (location.hash = 'games')">‹ All games</button>
+      <div id="game-detail"></div>
     </section>
 
     <!-- Ratings -->
@@ -204,5 +211,6 @@
   </dialog>
 
   <script src="app.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>

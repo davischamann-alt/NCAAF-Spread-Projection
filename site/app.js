@@ -290,7 +290,8 @@ function card(g, ev, isTracked) {
         <div><span class="k">Edge</span><span class="v">${ev.edge.toFixed(1)} pts</span></div></div>`;
   }
   const canTrack = g.state === "pre" && ev.margin != null && ev.line != null;
-  return `<article class="card game${ev.tier === "strong" ? " strong" : ""}">
+  return `<article class="card game${ev.tier === "strong" ? " strong" : ""}" data-game="${esc(g.id)}" tabindex="0"
+    aria-label="${esc(`${g.away.name} at ${g.home.name}: open game details`)}">
     <div class="game-top"><span class="${statusCls}">${esc(time)}</span><span>${esc(g.tv)}${g.neutral ? " · Neutral site" : ""}</span></div>
     ${teamRow(g.away, g)}${teamRow(g.home, g)}
     <div class="lines">
@@ -554,10 +555,13 @@ async function refresh(index = state.weekIndex) {
 
 function bind() {
   const showTab = () => {
-    const name = $(`.tabs button[data-tab="${location.hash.slice(1)}"]`) ? location.hash.slice(1) : "games";
-    $$(".tabs button").forEach((x) => x.setAttribute("aria-selected", x.dataset.tab === name));
+    const h = location.hash.slice(1);
+    const game = h.startsWith("game/") ? h.slice(5) : null;  // #game/<id>: game detail view (game.js)
+    const name = game ? "game" : $(`.tabs button[data-tab="${h}"]`) ? h : "games";
+    $$(".tabs button").forEach((x) => x.setAttribute("aria-selected", x.dataset.tab === (game ? "games" : name)));
     $$(".tab").forEach((s) => (s.hidden = s.id !== "tab-" + name));
     if (name === "picks") gradeOldPicks();
+    if (typeof showGame === "function") { if (game) showGame(game); else leaveGame(); }
   };
   $$(".tabs button").forEach((b) => b.addEventListener("click", () => { location.hash = b.dataset.tab; }));
   window.addEventListener("hashchange", showTab);
@@ -578,11 +582,19 @@ function bind() {
 
   document.addEventListener("click", (e) => {
     const t = e.target.closest("[data-track],[data-unpick],[data-delbet],th[data-sort]");
-    if (!t) return;
+    if (!t) {
+      const card = e.target.closest("article.game[data-game]");
+      if (card && !e.target.closest("a,button")) location.hash = `game/${card.dataset.game}`;
+      return;
+    }
     if (t.dataset.track) toggleTrack(t.dataset.track);
     else if (t.dataset.unpick) { store.set("picks", store.get("picks", []).filter((p) => p.id !== t.dataset.unpick)); renderAll(); }
     else if (t.dataset.delbet) { const b = store.get("bets", []); b.splice(+t.dataset.delbet, 1); store.set("bets", b); renderBets(); }
     else { const k = t.dataset.sort; ratingSort = { key: k, dir: ratingSort.key === k ? -ratingSort.dir : k === "team" ? 1 : -1 }; renderRatings(); }
+  });
+  document.addEventListener("keydown", (e) => {
+    const card = e.target.closest?.("article.game[data-game]");
+    if (card && e.target === card && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); location.hash = `game/${card.dataset.game}`; }
   });
   $("#bets-table").addEventListener("change", (e) => {
     const i = e.target.dataset.bet; if (i == null) return;
@@ -654,4 +666,5 @@ async function init() {
   await refresh(-1);
 }
 
-init();
+// game.js waits on this before drawing a game detail view
+const appReady = init();
