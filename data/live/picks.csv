@@ -11,30 +11,30 @@ logged_at,id,season,seasontype,week,kickoff,home,away,neutral,source,margin,line
 2026-10-22T02:29Z,401862807,2026,2,8,2026-10-22T23:30Z,Memphis,East Carolina,False,fpi,10.65,-10.5,-9.5,0.15,home,small,-10.5,7.0,L,L,0.0
 2026-10-22T02:29Z,401862807,2026,2,8,2026-10-22T23:30Z,Memphis,East Carolina,False,blend,11.9,-10.5,-9.5,1.4,home,small,-10.5,7.0,L,L,0.0
 2026-10-22T02:29Z,401862807,2026,2,8,2026-10-22T23:30Z,Memphis,East Carolina,False,anchored,11.72,-10.5,-9.5,1.22,home,small,-10.5,7.0,L,L,0.0
-2026-10-22T02:29Z,401858271,2026,2,8,2026-10-23T23:00Z,Virginia,Duke,False,points,1.21,-2.5,-6.5,1.29,away,small,-2.5,-3,W,W,-0.0
-2026-10-22T02:29Z,401858271,2026,2,8,2026-10-23T23:00Z,Virginia,Duke,False,fpi,0.72,-2.5,-6.5,1.78,away,lean,-2.5,-3,W,W,-0.0
-2026-10-22T02:29Z,401858271,2026,2,8,2026-10-23T23:00Z,Virginia,Duke,False,blend,0.96,-2.5,-6.5,1.54,away,lean,-2.5,-3,W,W,-0.0
-2026-10-22T02:29Z,401858271,2026,2,8,2026-10-23T23:00Z,Virginia,Duke,False,anchored,1.94,-2.5,-6.5,0.56,away,small,-2.5,-3,W,W,-0.0
-2026-10-22T02:29Z,401861965,2026,2,8,2026-10-23T23:00Z,UConn,Massachusetts,False,points,10.2,-14.5,-15.5,4.3,away,strong,-12.5,19,L,L,2.0
-2026-10-22T02:29Z,401861965,2026,2,8,2026-10-23T23:00Z,UConn,Massachusetts,False,fpi,10.37,-14.5,-15.5,4.13,away,strong,-12.5,19,L,L,2.0
-2026-10-22T02:29Z,401861965,2026,2,8,2026-10-23T23:00Z,UConn,Massachusetts,False,blend,10.28,-14.5,-15.5,4.22,away,strong,-12.5,19,L,L,2.0
-2026-10-22T02:29Z,401861965,2026,2,8,2026-10-23T23:00Z,UConn,Massachusetts,False,anchored,13.53,-14.5,-15.5,0.97,away,small,-12.5,19,L,L,2.0
-2026-10-22T02:29Z,401862808,2026,2,8,2026-10-24T00:30Z,Tulsa,Army,False,points,-1.24,-1.5,-1.5,2.74,away,lean,-1.5,-3,W,W,-0.0
-2026-10-22T02:29Z,401862808,2026,2,8,2026-10-24T00:30Z,Tulsa,Army,False,fpi,-1.04,-1.5,-1.5,2.54,away,lean,-1.5,-3,W,W,-0.0
-2026-10-22T02:29Z,401862808,2026,2,8,2026-10-24T00:30Z,Tulsa,Army,False,blend,-1.14,-1.5,-1.5,2.64,away,lean,-1.5,-3,W,W,-0.0
-2026-10-22T02:29Z,401862808,2026,2,8,2026-10-24T00:30Z,Tulsa,Army,False,anchored,0.41,-1.5,-1.5,1.09,away,small,-1.5,-3,W,W,-0.0
-2026-10-22T02:29Z,401864525,2026,2,8,2026-10-24T01:00Z,Wyoming,Air Force,False,points,-8.56,5.5,6.5,3.06,away,strong,6.5,14,L,L,1.0
-2026-10-22T02:29Z,401864525,2026,2,8,2026-10-24T01:00Z,Wyoming,Air Force,False,fpi,-10.81,5.5,6.5,5.31,away,strong,6.5,14,L,L,1.0
-2026-10-22T02:29Z,401864525,2026,2,8,2026-10-24T01:00Z,Wyoming,Air Force,False,blend,-9.68,5.5,6.5,4.19,away,strong,6.5,14,L,L,1.0
-2026-10-22T02:29Z,401864525,2026,2,8,2026-10-24T01:00Z,Wyoming,Air Force,False,anchored,-8.2,5.5,6.5,2.7,away,lean,6.5,14,L,L,1.0
-2026-10-22T02:29Z,401858272,2026,2,8,2026-10-24T02:30Z,Stanford,NC State,False,points,-11.39,6.5,7.5,4.89,away,strong,7.5,3,L,L,1.0
-2026-10-22T02:29Z,401858272,2026,2,8,2026-10-24T02:30Z,Stanford,NC State,False,fpi,-10.08,6.5,7.5,3.58,away,strong,7.5,3,L,L,1.0
-2026-10-22T02:29Z,401858272,2026,2,8,2026-10-24T02:30Z,Stanford,NC State,False,blend,-10.74,6.5,7.5,4.23,away,strong,7.5,3,L,L,1.0
-2026-10-22T02:29Z,401858272,2026,2,8,2026-10-24T02:30Z,Stanford,NC State,False,anchored,-8.81,6.5,7.5,2.31,away,lean,7.5,3,L,L,1.0
-2026-10-22T02:29Z,401858274,2026,2,8,2026-10-24T16:00Z,Miami,Pittsburgh,False,points,14.96,-19.5,-23.5,4.54,away,strong,-19.5,,,,
-2026-10-22T02:29Z,401858274,2026,2,8,2026-10-24T16:00Z,Miami,Pittsburgh,False,fpi,19.77,-19.5,-23.5,0.27,home,small,-19.5,,,,
-2026-10-22T02:29Z,401858274,2026,2,8,2026-10-24T16:00Z,Miami,Pittsburgh,False,blend,17.37,-19.5,-23.5,2.13,away,lean,-19.5,,,,
-2026-10-22T02:29Z,401858274,2026,2,8,2026-10-24T16:00Z,Miami,Pittsburgh,False,anchored,20.57,-19.5,-23.5,1.07,home,small,-19.5,,,,
+2026-10-22T02:29Z,401858271,2026,2,8,2026-10-23T23:00Z,Virginia,Duke,False,points,1.21,-2.5,-6.5,1.29,away,small,-2.5,-3.0,W,W,-0.0
+2026-10-22T02:29Z,401858271,2026,2,8,2026-10-23T23:00Z,Virginia,Duke,False,fpi,0.72,-2.5,-6.5,1.78,away,lean,-2.5,-3.0,W,W,-0.0
+2026-10-22T02:29Z,401858271,2026,2,8,2026-10-23T23:00Z,Virginia,Duke,False,blend,0.96,-2.5,-6.5,1.54,away,lean,-2.5,-3.0,W,W,-0.0
+2026-10-22T02:29Z,401858271,2026,2,8,2026-10-23T23:00Z,Virginia,Duke,False,anchored,1.94,-2.5,-6.5,0.56,away,small,-2.5,-3.0,W,W,-0.0
+2026-10-22T02:29Z,401861965,2026,2,8,2026-10-23T23:00Z,UConn,Massachusetts,False,points,10.2,-14.5,-15.5,4.3,away,strong,-12.5,19.0,L,L,2.0
+2026-10-22T02:29Z,401861965,2026,2,8,2026-10-23T23:00Z,UConn,Massachusetts,False,fpi,10.37,-14.5,-15.5,4.13,away,strong,-12.5,19.0,L,L,2.0
+2026-10-22T02:29Z,401861965,2026,2,8,2026-10-23T23:00Z,UConn,Massachusetts,False,blend,10.28,-14.5,-15.5,4.22,away,strong,-12.5,19.0,L,L,2.0
+2026-10-22T02:29Z,401861965,2026,2,8,2026-10-23T23:00Z,UConn,Massachusetts,False,anchored,13.53,-14.5,-15.5,0.97,away,small,-12.5,19.0,L,L,2.0
+2026-10-22T02:29Z,401862808,2026,2,8,2026-10-24T00:30Z,Tulsa,Army,False,points,-1.24,-1.5,-1.5,2.74,away,lean,-1.5,-3.0,W,W,-0.0
+2026-10-22T02:29Z,401862808,2026,2,8,2026-10-24T00:30Z,Tulsa,Army,False,fpi,-1.04,-1.5,-1.5,2.54,away,lean,-1.5,-3.0,W,W,-0.0
+2026-10-22T02:29Z,401862808,2026,2,8,2026-10-24T00:30Z,Tulsa,Army,False,blend,-1.14,-1.5,-1.5,2.64,away,lean,-1.5,-3.0,W,W,-0.0
+2026-10-22T02:29Z,401862808,2026,2,8,2026-10-24T00:30Z,Tulsa,Army,False,anchored,0.41,-1.5,-1.5,1.09,away,small,-1.5,-3.0,W,W,-0.0
+2026-10-22T02:29Z,401864525,2026,2,8,2026-10-24T01:00Z,Wyoming,Air Force,False,points,-8.56,5.5,6.5,3.06,away,strong,6.5,14.0,L,L,1.0
+2026-10-22T02:29Z,401864525,2026,2,8,2026-10-24T01:00Z,Wyoming,Air Force,False,fpi,-10.81,5.5,6.5,5.31,away,strong,6.5,14.0,L,L,1.0
+2026-10-22T02:29Z,401864525,2026,2,8,2026-10-24T01:00Z,Wyoming,Air Force,False,blend,-9.68,5.5,6.5,4.19,away,strong,6.5,14.0,L,L,1.0
+2026-10-22T02:29Z,401864525,2026,2,8,2026-10-24T01:00Z,Wyoming,Air Force,False,anchored,-8.2,5.5,6.5,2.7,away,lean,6.5,14.0,L,L,1.0
+2026-10-22T02:29Z,401858272,2026,2,8,2026-10-24T02:30Z,Stanford,NC State,False,points,-11.39,6.5,7.5,4.89,away,strong,7.5,3.0,L,L,1.0
+2026-10-22T02:29Z,401858272,2026,2,8,2026-10-24T02:30Z,Stanford,NC State,False,fpi,-10.08,6.5,7.5,3.58,away,strong,7.5,3.0,L,L,1.0
+2026-10-22T02:29Z,401858272,2026,2,8,2026-10-24T02:30Z,Stanford,NC State,False,blend,-10.74,6.5,7.5,4.23,away,strong,7.5,3.0,L,L,1.0
+2026-10-22T02:29Z,401858272,2026,2,8,2026-10-24T02:30Z,Stanford,NC State,False,anchored,-8.81,6.5,7.5,2.31,away,lean,7.5,3.0,L,L,1.0
+2026-10-22T02:29Z,401858274,2026,2,8,2026-10-24T16:00Z,Miami,Pittsburgh,False,points,14.96,-19.5,-23.5,4.54,away,strong,-20.5,,,,
+2026-10-22T02:29Z,401858274,2026,2,8,2026-10-24T16:00Z,Miami,Pittsburgh,False,fpi,19.77,-19.5,-23.5,0.27,home,small,-20.5,,,,
+2026-10-22T02:29Z,401858274,2026,2,8,2026-10-24T16:00Z,Miami,Pittsburgh,False,blend,17.37,-19.5,-23.5,2.13,away,lean,-20.5,,,,
+2026-10-22T02:29Z,401858274,2026,2,8,2026-10-24T16:00Z,Miami,Pittsburgh,False,anchored,20.57,-19.5,-23.5,1.07,home,small,-20.5,,,,
 2026-10-22T02:29Z,401858496,2026,2,8,2026-10-24T16:00Z,Michigan,Indiana,False,points,-12.13,7.0,6.5,5.13,away,strong,7.5,,,,
 2026-10-22T02:29Z,401858496,2026,2,8,2026-10-24T16:00Z,Michigan,Indiana,False,fpi,-11.92,7.0,6.5,4.92,away,strong,7.5,,,,
 2026-10-22T02:29Z,401858496,2026,2,8,2026-10-24T16:00Z,Michigan,Indiana,False,blend,-12.02,7.0,6.5,5.03,away,strong,7.5,,,,
@@ -63,10 +63,10 @@ logged_at,id,season,seasontype,week,kickoff,home,away,neutral,source,margin,line
 2026-10-22T02:29Z,401862809,2026,2,8,2026-10-24T16:00Z,Florida Atlantic,Rice,False,fpi,7.53,-7.5,-10.5,0.03,home,small,-8.5,,,,
 2026-10-22T02:29Z,401862809,2026,2,8,2026-10-24T16:00Z,Florida Atlantic,Rice,False,blend,9.41,-7.5,-10.5,1.91,home,lean,-8.5,,,,
 2026-10-22T02:29Z,401862809,2026,2,8,2026-10-24T16:00Z,Florida Atlantic,Rice,False,anchored,8.59,-7.5,-10.5,1.09,home,small,-8.5,,,,
-2026-10-22T02:29Z,401866450,2026,2,8,2026-10-24T16:00Z,Toledo,Western Michigan,False,points,3.56,-3.0,-1.5,0.56,home,small,-3.0,,,,
-2026-10-22T02:29Z,401866450,2026,2,8,2026-10-24T16:00Z,Toledo,Western Michigan,False,fpi,1.58,-3.0,-1.5,1.42,away,small,-3.0,,,,
-2026-10-22T02:29Z,401866450,2026,2,8,2026-10-24T16:00Z,Toledo,Western Michigan,False,blend,2.57,-3.0,-1.5,0.43,away,small,-3.0,,,,
-2026-10-22T02:29Z,401866450,2026,2,8,2026-10-24T16:00Z,Toledo,Western Michigan,False,anchored,2.83,-3.0,-1.5,0.17,away,small,-3.0,,,,
+2026-10-22T02:29Z,401866450,2026,2,8,2026-10-24T16:00Z,Toledo,Western Michigan,False,points,3.56,-3.0,-1.5,0.56,home,small,-2.5,,,,
+2026-10-22T02:29Z,401866450,2026,2,8,2026-10-24T16:00Z,Toledo,Western Michigan,False,fpi,1.58,-3.0,-1.5,1.42,away,small,-2.5,,,,
+2026-10-22T02:29Z,401866450,2026,2,8,2026-10-24T16:00Z,Toledo,Western Michigan,False,blend,2.57,-3.0,-1.5,0.43,away,small,-2.5,,,,
+2026-10-22T02:29Z,401866450,2026,2,8,2026-10-24T16:00Z,Toledo,Western Michigan,False,anchored,2.83,-3.0,-1.5,0.17,away,small,-2.5,,,,
 2026-10-22T02:29Z,401856834,2026,2,8,2026-10-24T17:00Z,Kansas,Baylor,False,points,-1.26,3.0,1.5,1.74,home,lean,1.5,,,,
 2026-10-22T02:29Z,401856834,2026,2,8,2026-10-24T17:00Z,Kansas,Baylor,False,fpi,-3.54,3.0,1.5,0.54,away,small,1.5,,,,
 2026-10-22T02:29Z,401856834,2026,2,8,2026-10-24T17:00Z,Kansas,Baylor,False,blend,-2.4,3.0,1.5,0.6,home,small,1.5,,,,
@@ -183,14 +183,14 @@ logged_at,id,season,seasontype,week,kickoff,home,away,neutral,source,margin,line
 2026-10-22T02:29Z,401858500,2026,2,8,2026-10-24T23:30Z,Wisconsin,USC,False,fpi,-3.43,3.0,1.5,0.43,away,small,3.0,,,,
 2026-10-22T02:29Z,401858500,2026,2,8,2026-10-24T23:30Z,Wisconsin,USC,False,blend,-0.76,3.0,1.5,2.24,home,lean,3.0,,,,
 2026-10-22T02:29Z,401858500,2026,2,8,2026-10-24T23:30Z,Wisconsin,USC,False,anchored,-2.7,3.0,1.5,0.3,home,small,3.0,,,,
-2026-10-22T02:29Z,401856838,2026,2,8,2026-10-24T23:30Z,Arizona,Iowa State,False,points,6.99,-10.5,-10.0,3.51,away,strong,-10.5,,,,
-2026-10-22T02:29Z,401856838,2026,2,8,2026-10-24T23:30Z,Arizona,Iowa State,False,fpi,8.73,-10.5,-10.0,1.77,away,lean,-10.5,,,,
-2026-10-22T02:29Z,401856838,2026,2,8,2026-10-24T23:30Z,Arizona,Iowa State,False,blend,7.86,-10.5,-10.0,2.64,away,lean,-10.5,,,,
-2026-10-22T02:29Z,401856838,2026,2,8,2026-10-24T23:30Z,Arizona,Iowa State,False,anchored,10.26,-10.5,-10.0,0.24,away,small,-10.5,,,,
-2026-10-22T02:29Z,401858275,2026,2,8,2026-10-24T23:30Z,North Carolina,Syracuse,False,points,5.2,-8.5,-9.5,3.3,away,strong,-8.5,,,,
-2026-10-22T02:29Z,401858275,2026,2,8,2026-10-24T23:30Z,North Carolina,Syracuse,False,fpi,10.61,-8.5,-9.5,2.11,home,lean,-8.5,,,,
-2026-10-22T02:29Z,401858275,2026,2,8,2026-10-24T23:30Z,North Carolina,Syracuse,False,blend,7.91,-8.5,-9.5,0.59,away,small,-8.5,,,,
-2026-10-22T02:29Z,401858275,2026,2,8,2026-10-24T23:30Z,North Carolina,Syracuse,False,anchored,9.65,-8.5,-9.5,1.15,home,small,-8.5,,,,
+2026-10-22T02:29Z,401856838,2026,2,8,2026-10-24T23:30Z,Arizona,Iowa State,False,points,6.99,-10.5,-10.0,3.51,away,strong,-11.5,,,,
+2026-10-22T02:29Z,401856838,2026,2,8,2026-10-24T23:30Z,Arizona,Iowa State,False,fpi,8.73,-10.5,-10.0,1.77,away,lean,-11.5,,,,
+2026-10-22T02:29Z,401856838,2026,2,8,2026-10-24T23:30Z,Arizona,Iowa State,False,blend,7.86,-10.5,-10.0,2.64,away,lean,-11.5,,,,
+2026-10-22T02:29Z,401856838,2026,2,8,2026-10-24T23:30Z,Arizona,Iowa State,False,anchored,10.26,-10.5,-10.0,0.24,away,small,-11.5,,,,
+2026-10-22T02:29Z,401858275,2026,2,8,2026-10-24T23:30Z,North Carolina,Syracuse,False,points,5.2,-8.5,-9.5,3.3,away,strong,-9.5,,,,
+2026-10-22T02:29Z,401858275,2026,2,8,2026-10-24T23:30Z,North Carolina,Syracuse,False,fpi,10.61,-8.5,-9.5,2.11,home,lean,-9.5,,,,
+2026-10-22T02:29Z,401858275,2026,2,8,2026-10-24T23:30Z,North Carolina,Syracuse,False,blend,7.91,-8.5,-9.5,0.59,away,small,-9.5,,,,
+2026-10-22T02:29Z,401858275,2026,2,8,2026-10-24T23:30Z,North Carolina,Syracuse,False,anchored,9.65,-8.5,-9.5,1.15,home,small,-9.5,,,,
 2026-10-22T02:29Z,401860906,2026,2,8,2026-10-24T23:30Z,Texas State,Utah State,False,points,13.53,-13.5,-9.5,0.03,home,small,-13.5,,,,
 2026-10-22T02:29Z,401860906,2026,2,8,2026-10-24T23:30Z,Texas State,Utah State,False,fpi,9.97,-13.5,-9.5,3.53,away,strong,-13.5,,,,
 2026-10-22T02:29Z,401860906,2026,2,8,2026-10-24T23:30Z,Texas State,Utah State,False,blend,11.75,-13.5,-9.5,1.75,away,lean,-13.5,,,,
