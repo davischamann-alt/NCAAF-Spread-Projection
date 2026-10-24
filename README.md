@@ -43,6 +43,7 @@ It's free. Scores, lines and ESPN's team ratings come from ESPN's public data. T
 12. [Files](#files)
 13. [Troubleshooting](#troubleshooting)
 14. [Limitations](#limitations)
+15. [Ideas for later](#ideas-for-later)
 
 ---
 
@@ -395,3 +396,35 @@ fourth-and-value/
 - **Lines differ by sportsbook.** Lines come from one book per game (DraftKings when available), so yours may differ.
 - **Small samples mislead.** A few weeks of results can look great or terrible by luck alone. Judge by hundreds of picks and by line movement.
 - **No guarantees.** A high cover percentage is still not a sure thing.
+
+---
+
+## Ideas for later
+
+### Game detail view
+
+Tap a game card to open a page with more analysis. On a phone it would slide up as a full-screen panel; on a computer it would open beside the game list. Each game would get its own link (for example `#game/401858123`) that can be shared.
+
+**What it would show:**
+
+1. **Why this pick:** all four projections side by side against the line, showing how far each disagrees and whether they agree. Agreement across FPI, adjusted points and Market-anchored is worth seeing; a split is a reason to punt.
+2. **Line movement:** a chart of the line through the week, from the line history the GitHub job records every two hours (`data/live/line_history.csv`).
+3. **Matchup:**
+   - **Ratings:** both teams' FPI rank, plus adjusted offense and defense.
+   - **Season stats:** points, yards, passing and rushing, and yards allowed.
+   - **Recent form:** each team's last five games, plus its record against the spread.
+4. **A second opinion:** ESPN's own win chance for the game, shown next to the model's projection.
+5. **Conditions:** venue, neutral site, and the weather forecast (temperature, wind gusts, rain chance).
+6. **During and after the game:**
+   - **Cover chance over time:** how the live cover chance moved.
+   - **ESPN's win-probability line** and scoring leaders.
+   - **Forward-test entry:** when the pick was recorded, at what line, and how it graded.
+
+**Where the data comes from:**
+- **ESPN's per-game summary feed** (`…/college-football/summary?event=<game id>`), which the page can already read directly. It covers sections 3–6: team stats, last five games, records against the spread, ESPN's win chance, weather, venue, win probability and leaders.
+- **The site's own data** for the projections, ratings and forward-test entry.
+- **One new piece of work:** the GitHub job would publish each game's line history as a small file in `site/data/` for the line-movement chart.
+
+**Known gap:** ESPN's feed has no injury data for college football (that section comes back empty). The detail view should say so plainly, since quarterback news is the model's biggest blind spot.
+
+**Size:** a moderate build, made up of one new view in `site/app.js`, its styles, and the line-history publishing step in `record.py`.
