@@ -182,6 +182,7 @@ input:focus-visible, select:focus-visible, .chips button:focus-visible {
 }
 .chips .count:empty { display: none; }
 .chips button.on .count { background: rgba(255, 255, 255, .18); color: var(--chalk); }
+.chips .lbl { display: inline-flex; align-items: center; gap: 6px; }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .45; }
 .is-live .live-dot { background: var(--live); opacity: 1; }
 
@@ -321,16 +322,19 @@ dialog::backdrop { background: rgba(5, 20, 12, .45); }
   .controls .field:not(.grow):not(.wide) { flex: 1 1 45%; }
   .controls .field.wide, .controls .field.grow { flex: 1 1 100%; }
   .toolbar .chips { flex: 1 1 100%; }
-  .toolbar .chips button { flex: 1 0 auto; padding: 0 6px; font-size: 13px; gap: 4px; }
-  .toolbar .chips .count { min-width: 20px; padding: 2px 5px; }
+  /* phones: four equal columns, count under the label, so it fits any width */
+  .toolbar .chips { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .toolbar .chips button { flex-direction: column; height: 50px; gap: 3px; padding: 0 2px; font-size: 13px; }
+  .toolbar .chips .count { min-width: 22px; }
   .hide-sm { display: none; }
   .show-sm { display: inline; }
-  .controls .chips { width: 100%; }
-  .controls .chips button { flex: 1 0 auto; padding: 0 8px; font-size: 13px; }
+  .controls .chips { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; }
+  .controls .chips button { padding: 0 4px; font-size: 13px; }
   .search { flex-basis: 100%; }
   .toolbar-sub { gap: 10px; }
   .inline-select { flex: 1 1 100%; justify-content: space-between; }
-  .inline-select select { flex: 1; max-width: 70%; }
+  .inline-select > span { flex: none; width: 82px; }
+  .inline-select select { flex: 1; min-width: 0; width: 100%; }
   .toolbar-note { margin-left: 0; }
   .field select { width: 100%; }
 }

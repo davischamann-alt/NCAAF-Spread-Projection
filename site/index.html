@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap">
-  <link rel="stylesheet" href="style.css?v=11">
+  <link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
   <header class="top">
@@ -38,10 +38,10 @@
       <div class="toolbar">
         <div class="toolbar-row">
           <div class="chips" id="filter" role="group" aria-label="Show">
-            <button data-filter="all" class="on">All <span class="count" data-count="all"></span></button>
-            <button data-filter="edge">Edges<span class="hide-sm">&nbsp;1.5+</span> <span class="count" data-count="edge"></span></button>
-            <button data-filter="strong">Go for it <span class="count" data-count="strong"></span></button>
-            <button data-filter="live"><span class="live-dot" aria-hidden="true"></span>Live <span class="count" data-count="live"></span></button>
+            <button data-filter="all" class="on"><span class="lbl">All</span><span class="count" data-count="all"></span></button>
+            <button data-filter="edge"><span class="lbl">Edges<span class="hide-sm">&nbsp;1.5+</span></span><span class="count" data-count="edge"></span></button>
+            <button data-filter="strong"><span class="lbl">Go for it</span><span class="count" data-count="strong"></span></button>
+            <button data-filter="live"><span class="lbl"><span class="live-dot" aria-hidden="true"></span>Live</span><span class="count" data-count="live"></span></button>
           </div>
           <label class="search">
             <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
@@ -209,7 +209,7 @@
     </form>
   </dialog>
 
-  <script src="app.js?v=11"></script>
-  <script src="game.js?v=11"></script>
+  <script src="app.js?v=12"></script>
+  <script src="game.js?v=12"></script>
 </body>
 </html>
