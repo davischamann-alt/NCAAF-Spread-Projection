@@ -94,7 +94,8 @@ function pickCard(g) {
         <td>${r.edge == null ? "—" : `<span class="badge ${r.tier}">${TIER_TXT[r.tier]} · ${r.edge.toFixed(1)}</span>`}</td>
         <td>${r.edge == null ? "—" : pct(r.prob)}</td></tr>`).join("")}
     </table></div>
-    <p class="note">★ is the projection chosen on the Games tab. Each uses its own tested std dev for the cover chance.</p>
+    <p class="note">★ is the projection chosen on the Games tab. Each uses its own tested std dev for the cover chance.
+      ${g.state === "pre" ? "" : "These use today's ratings, which can include this game's own result. <b>Forward test</b> below shows the picks as they were recorded before kickoff."}</p>
   </div>`;
 }
 
