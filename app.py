@@ -14,7 +14,7 @@ HISTORY, BETS = DATA / "history.csv", DATA / "bets.csv"
 HIST_COLS = ["id", "date", "home", "away", "line", "proj_margin", "pick_side", "cover_prob", "final_margin", "covered", "source"]
 BET_COLS = ["date", "game", "side", "line", "odds", "stake", "result"]
 
-st.set_page_config(page_title="CFB Edge Dashboard", page_icon="🏈", layout="wide")
+st.set_page_config(page_title="Fourth & Value", page_icon="🏈", layout="wide")
 
 
 def read(path, cols, **kw):
@@ -51,7 +51,8 @@ def grade(hist, games):
     return hist
 
 
-st.title("🏈 College Football Edge Dashboard")
+st.title("Fourth & Value")
+st.caption("Only go for it when the numbers say so.")
 day = st.sidebar.date_input("Date", dt.date.today())
 sigma = st.sidebar.slider("Margin std dev (pts)", 10.0, 20.0, 14.0, 0.5)
 hfa = st.sidebar.slider("Home-field advantage (pts)", 0.0, 5.0, 2.5, 0.5)

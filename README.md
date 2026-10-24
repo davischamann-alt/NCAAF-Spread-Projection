@@ -1,6 +1,8 @@
-# 🏈 College Football Edge Dashboard
+# Fourth & Value
 
-A dashboard that runs on your own computer and compares its own point-spread predictions for college football games with the Vegas betting line. It shows which side it would pick, how likely that pick is to cover before and during the game, and how well its picks have done in the past.
+**Only go for it when the numbers say so.**
+
+College football spread projections, compared with the Vegas betting line. Fourth & Value shows which side its model would pick, how likely that pick is to cover before and during the game, and how well its picks have done, including a public log of picks recorded before kickoff.
 
 It's free. Scores, lines and ESPN's team ratings come from ESPN's public data. Testing past seasons is optional and uses a free key from CollegeFootballData.com.
 
@@ -8,7 +10,7 @@ It's free. Scores, lines and ESPN's team ratings come from ESPN's public data. T
 
 | | **Website** | **App on your computer** |
 | --- | --- | --- |
-| Where | **[davischamann-alt.github.io/NCAAF-Spread-Projection](https://davischamann-alt.github.io/NCAAF-Spread-Projection/)** | Runs in your browser from your own computer |
+| Where | **[davischamann-alt.github.io/fourth-and-value](https://davischamann-alt.github.io/fourth-and-value/)** | Runs in your browser from your own computer |
 | Setup | None: open the link on any phone or computer | About 10 minutes ([Install and run it](#install-and-run-it)) |
 | Games, picks, live cover chances | ✅ | ✅ |
 | Ratings | Updated automatically every morning | Click **Auto-fill** to update |
@@ -47,9 +49,9 @@ It's free. Scores, lines and ESPN's team ratings come from ESPN's public data. T
 
 ### The website
 
-Open **[davischamann-alt.github.io/NCAAF-Spread-Projection](https://davischamann-alt.github.io/NCAAF-Spread-Projection/)**. It works on phones, and you can add it to your home screen from the browser's Share menu.
+Open **[davischamann-alt.github.io/fourth-and-value](https://davischamann-alt.github.io/fourth-and-value/)**. It works on phones, and you can add it to your home screen from the browser's Share menu.
 
-- **Games:** one week at a time (use ‹ › to change weeks), grouped by day. Each game card shows the line and where it opened, the model's pick, an edge badge (**Strong** 3+ points, **Lean** 1.5–3, **Small** under 1.5), and the cover chance, which updates live during games. Filter to strong edges or live games, sort by biggest edge, or search for a team.
+- **Games:** one week at a time (use ‹ › to change weeks), grouped by day. Each game card shows the line and where it opened, the model's pick, an edge badge labeled like a fourth-down call (**Go for it** at 3+ points, **Lean** at 1.5–3, **Punt** under 1.5, meaning no bet), and the cover chance, which updates live during games. Filter to go-for-it edges or live games, sort by biggest edge, or search for a team.
 - **Ratings:** every FBS team's FPI and adjusted offense and defense, sortable and searchable.
 - **My picks:** tap **☆ Track pick** on a game before kickoff, and it's graded automatically when the game ends.
 - **Bets:** log bets and see your record, profit and ROI, and download or import them as CSV.
@@ -88,13 +90,13 @@ You need about 10 minutes and an internet connection. No programming is required
 
 ### 2. Get the code (one time)
 
-**Option A, no tools needed:** on the [GitHub page](https://github.com/davischamann-alt/NCAAF-Spread-Projection), click the green **Code** button, then **Download ZIP**. Unzip it into your **Downloads** folder, and rename the folder to `NCAAF-Spread-Projection` if it has a different name (GitHub usually adds `-main`).
+**Option A, no tools needed:** on the [GitHub page](https://github.com/davischamann-alt/fourth-and-value), click the green **Code** button, then **Download ZIP**. Unzip it into your **Downloads** folder, and rename the folder to `fourth-and-value` if it has a different name (GitHub usually adds `-main`).
 
 **Option B, with git:**
 
 ```bash
 cd ~/Downloads
-git clone https://github.com/davischamann-alt/NCAAF-Spread-Projection.git
+git clone https://github.com/davischamann-alt/fourth-and-value.git
 ```
 
 ### 3. Set it up (one time)
@@ -104,7 +106,7 @@ Run these one at a time in Terminal or Command Prompt. They create a private Pyt
 **Mac:**
 
 ```bash
-cd ~/Downloads/NCAAF-Spread-Projection
+cd ~/Downloads/fourth-and-value
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -113,7 +115,7 @@ pip install -r requirements.txt
 **Windows:**
 
 ```bat
-cd %USERPROFILE%\Downloads\NCAAF-Spread-Projection
+cd %USERPROFILE%\Downloads\fourth-and-value
 py -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
@@ -124,7 +126,7 @@ pip install -r requirements.txt
 **Mac:**
 
 ```bash
-cd ~/Downloads/NCAAF-Spread-Projection
+cd ~/Downloads/fourth-and-value
 source venv/bin/activate
 streamlit run app.py
 ```
@@ -132,7 +134,7 @@ streamlit run app.py
 **Windows:**
 
 ```bat
-cd %USERPROFILE%\Downloads\NCAAF-Spread-Projection
+cd %USERPROFILE%\Downloads\fourth-and-value
 venv\Scripts\activate
 streamlit run app.py
 ```
@@ -335,7 +337,7 @@ To preview the website on your own computer, run `python build_site.py` once, th
 ## Files
 
 ```
-NCAAF-Spread-Projection/
+fourth-and-value/
 ├── app.py                    # the computer app: screens and buttons (Streamlit)
 ├── sources.py                # data downloads from ESPN and CollegeFootballData
 ├── model.py                  # the math: ratings, projections, cover chances, backtest scoring

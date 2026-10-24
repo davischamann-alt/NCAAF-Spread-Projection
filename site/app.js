@@ -226,7 +226,7 @@ function renderGames() {
   const all = state.games.map(evaluate);
   const live = state.games.filter((g) => g.state === "in").length;
   $("#games-summary").textContent = state.games.length
-    ? `${state.games.length} games · ${all.filter((e) => e.edge >= STRONG).length} strong edges · ` +
+    ? `${state.games.length} games · ${all.filter((e) => e.edge >= STRONG).length} go-for-it edges · ` +
       `${all.filter((e) => e.edge >= LEAN && e.edge < STRONG).length} leans` + (live ? ` · ${live} live now` : "") +
       ` · projection: ${SOURCE_LABEL[state.source]}, std dev ${sigma()}`
     : "";
@@ -271,7 +271,7 @@ function card(g, ev, isTracked) {
   } else {
     const fav = ev.margin >= 0 ? g.home : g.away;
     const modelTxt = Math.abs(ev.margin) < 0.05 ? "Even" : `${esc(fav.abbr)} by ${Math.abs(ev.margin).toFixed(1)}`;
-    const tierTxt = { strong: "Strong edge", lean: "Lean", pass: "Small edge" }[ev.tier];
+    const tierTxt = { strong: "Go for it", lean: "Lean", pass: "Punt" }[ev.tier];  // fourth-down calls
     const p = ev.live ?? ev.pre;
     const done = g.state === "post";
     const barCls = done ? (ev.live > 0.5 ? "good" : ev.live < 0.5 ? "bad" : "") : "";
@@ -369,7 +369,7 @@ function renderPicks() {
     ["Tracked picks", picks.length],
     ["Record", `${wins}-${done.length - wins}${picks.some((p) => p.result === "P") ? `-${picks.filter((p) => p.result === "P").length}` : ""}`],
     ["Hit rate", done.length ? pct(wins / done.length, 1) : "—"],
-    ["Strong edges", strong.length ? `${sw}-${strong.length - sw}` : "—"],
+    ["Go-for-it picks", strong.length ? `${sw}-${strong.length - sw}` : "—"],
   ].map(([k, v]) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
   const res = { W: `<span class="badge win">Won</span>`, L: `<span class="badge loss">Lost</span>`, P: `<span class="badge pass">Push</span>` };
   $("#picks-table").innerHTML = `<tr><th>Game</th><th class="l">Pick</th><th>Edge</th><th>Chance</th><th class="l">Projection</th><th class="l">Result</th><th></th></tr>` +

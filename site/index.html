@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CFB Edge</title>
-  <meta name="description" content="College football spread projections compared with the Vegas line, with live cover chances and a tested track record.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏈</text></svg>">
+  <title>Fourth &amp; Value</title>
+  <meta name="description" content="Fourth & Value: college football spread projections compared with the Vegas line, live cover chances, and a track record recorded before kickoff.">
+  <meta name="theme-color" content="#0f3d26">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230f3d26'/><rect y='40' width='64' height='6' fill='%23ffd23f'/><text x='32' y='35' font-family='Arial Narrow,Arial,sans-serif' font-weight='900' font-size='30' fill='%23f7f5ef' text-anchor='middle'>4%26V</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="top">
-    <div class="brand">🏈 <span>CFB Edge</span></div>
+    <div class="brand" aria-label="Fourth and Value"><span class="down">4th</span><span class="dist"><b>&amp;</b>Value</span></div>
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="games" aria-selected="true">Games</button>
       <button role="tab" data-tab="ratings">Ratings</button>
@@ -45,7 +49,7 @@
           <div class="chips" id="filter">
             <button data-filter="all" class="on">All games</button>
             <button data-filter="edge">Edges 1.5+</button>
-            <button data-filter="strong">Strong 3+</button>
+            <button data-filter="strong">Go for it (3+)</button>
             <button data-filter="live">Live</button>
           </div>
         </div>
@@ -69,8 +73,8 @@
         <ul>
           <li><b>Line</b> is the betting spread from ESPN. The small gray number is where it opened, so you can see how it moved.</li>
           <li><b>Model</b> is the predicted final margin. <b>Pick</b> is the side the model thinks covers the line.</li>
-          <li><b>Edge</b> is how many points the model disagrees with the line by. <span class="badge strong">Strong</span> is 3+ points, <span class="badge lean">Lean</span> is 1.5–3, and <span class="badge pass">Small</span> is less.</li>
-          <li><b>Cover chance</b> is the model's chance the pick covers. During a game it updates with the score and clock.</li>
+          <li><b>Edge</b> is how many points the model disagrees with the line by. It's labeled like a fourth-down call: <span class="badge strong">Go for it</span> is 3+ points, <span class="badge lean">Lean</span> is 1.5–3, and <span class="badge pass">Punt</span> is less, meaning no bet.</li>
+          <li><b>Cover chance</b> is the model's chance the pick covers. During a game it updates with the score and clock. The yellow tick on the bar marks 52.4%, the break-even point at standard -110 odds.</li>
           <li>The <b>Track</b> button saves a pick to <b>My picks</b>, where it's graded automatically when the game ends.</li>
         </ul>
       </details>
@@ -180,6 +184,7 @@
   </main>
 
   <footer class="foot">
+    <span class="tagline">Fourth &amp; Value · Only go for it when the numbers say so.</span>
     <span id="updated"></span>
     <span>Data: ESPN · CollegeFootballData. For analysis only, not betting advice.</span>
   </footer>
