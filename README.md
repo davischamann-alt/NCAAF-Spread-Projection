@@ -2,6 +2,14 @@
 
 **Only go for it when the numbers say so.**
 
+> **New name, new address (October 24, 2026).** This project used to be called **CFB Edge**, in a repository named `NCAAF-Spread-Projection`. It's now **Fourth & Value**:
+>
+> - **Website:** [davischamann-alt.github.io/fourth-and-value](https://davischamann-alt.github.io/fourth-and-value/). The old address, `davischamann-alt.github.io/NCAAF-Spread-Projection`, no longer works, so update any bookmarks or links you've shared.
+> - **Repository:** [github.com/davischamann-alt/fourth-and-value](https://github.com/davischamann-alt/fourth-and-value). Old repository links redirect here automatically.
+> - **If you cloned the old repository,** point your copy at the new one with `git remote set-url origin https://github.com/davischamann-alt/fourth-and-value.git`.
+>
+> Nothing else changed: the model, the data and the forward-test pick log carried over as they were.
+
 College football spread projections, compared with the Vegas betting line. Fourth & Value shows which side its model would pick, how likely that pick is to cover before and during the game, and how well its picks have done, including a public log of picks recorded before kickoff.
 
 It's free. Scores, lines and ESPN's team ratings come from ESPN's public data. Testing past seasons is optional and uses a free key from CollegeFootballData.com.
