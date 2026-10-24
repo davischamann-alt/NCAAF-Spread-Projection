@@ -224,12 +224,13 @@ function renderGames() {
   else rows.sort((a, b) => a.g.date.localeCompare(b.g.date) || (b.ev.edge ?? -1) - (a.ev.edge ?? -1));
 
   const all = state.games.map(evaluate);
-  const live = state.games.filter((g) => g.state === "in").length;
-  $("#games-summary").textContent = state.games.length
-    ? `${state.games.length} games · ${all.filter((e) => e.edge >= STRONG).length} go-for-it edges · ` +
-      `${all.filter((e) => e.edge >= LEAN && e.edge < STRONG).length} leans` + (live ? ` · ${live} live now` : "") +
-      ` · projection: ${SOURCE_LABEL[state.source]}, std dev ${sigma()}`
-    : "";
+  const counts = {
+    all: state.games.length, edge: all.filter((e) => e.edge >= LEAN).length,
+    strong: all.filter((e) => e.edge >= STRONG).length, live: state.games.filter((g) => g.state === "in").length,
+  };
+  $$("[data-count]").forEach((el) => (el.textContent = state.games.length ? counts[el.dataset.count] : ""));
+  $('#filter [data-filter="live"]').classList.toggle("is-live", counts.live > 0);
+  $("#games-summary").textContent = state.games.length ? `Cover chances use a ${sigma()}-point std dev` : "";
 
   const box = $("#games");
   if (!rows.length) {

@@ -7,10 +7,11 @@
   <meta name="description" content="Fourth & Value: college football spread projections compared with the Vegas line, live cover chances, and a track record recorded before kickoff.">
   <meta name="theme-color" content="#0f3d26">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230f3d26'/><rect y='40' width='64' height='6' fill='%23ffd23f'/><text x='32' y='35' font-family='Arial Narrow,Arial,sans-serif' font-weight='900' font-size='30' fill='%23f7f5ef' text-anchor='middle'>4%26V</text></svg>">
+  <!-- ?v= numbers: bump them when style.css or the scripts change, so browsers don't mix old and new files -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
   <header class="top">
@@ -34,39 +35,37 @@
         <button class="icon-btn" id="week-next" aria-label="Next week">›</button>
       </div>
 
-      <div class="controls">
-        <label class="field">
-          <span>Projection</span>
-          <select id="source">
-            <option value="anchored">Market-anchored (tested best)</option>
-            <option value="fpi">ESPN FPI</option>
-            <option value="blend">Blend (points + FPI)</option>
-            <option value="points">Adjusted points</option>
-          </select>
-        </label>
-        <div class="field wide">
-          <span>Show</span>
-          <div class="chips" id="filter">
-            <button data-filter="all" class="on">All games</button>
-            <button data-filter="edge">Edges 1.5+</button>
-            <button data-filter="strong">Go for it (3+)</button>
-            <button data-filter="live">Live</button>
+      <div class="toolbar">
+        <div class="toolbar-row">
+          <div class="chips" id="filter" role="group" aria-label="Show">
+            <button data-filter="all" class="on">All <span class="count" data-count="all"></span></button>
+            <button data-filter="edge">Edges<span class="hide-sm">&nbsp;1.5+</span> <span class="count" data-count="edge"></span></button>
+            <button data-filter="strong">Go for it <span class="count" data-count="strong"></span></button>
+            <button data-filter="live"><span class="live-dot" aria-hidden="true"></span>Live <span class="count" data-count="live"></span></button>
           </div>
+          <label class="search">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
+            <input id="search" type="search" placeholder="Find a team" autocomplete="off" aria-label="Find a team">
+          </label>
         </div>
-        <label class="field">
-          <span>Sort</span>
-          <select id="sort">
-            <option value="time">Kickoff time</option>
-            <option value="edge">Biggest edge</option>
-          </select>
-        </label>
-        <label class="field grow">
-          <span>Find a team</span>
-          <input id="search" type="search" placeholder="e.g. Ohio State" autocomplete="off">
-        </label>
+        <div class="toolbar-row toolbar-sub">
+          <label class="inline-select" title="★ tested best. Blend averages FPI and adjusted points."><span>Projection</span>
+            <select id="source">
+              <option value="anchored">★ Market-anchored</option>
+              <option value="fpi">ESPN FPI</option>
+              <option value="blend">Blend</option>
+              <option value="points">Adjusted points</option>
+            </select>
+          </label>
+          <label class="inline-select"><span>Sort</span>
+            <select id="sort">
+              <option value="time">Kickoff time</option>
+              <option value="edge">Biggest edge</option>
+            </select>
+          </label>
+          <span class="toolbar-note" id="games-summary"></span>
+        </div>
       </div>
-
-      <p class="summary" id="games-summary"></p>
       <div id="games"></div>
       <details class="explain">
         <summary>How to read a game card</summary>
@@ -139,10 +138,10 @@
         <div class="field wide">
           <span>Projection</span>
           <div class="chips" id="live-source">
-            <button data-v="anchored" class="on">Market-anchored</button>
-            <button data-v="fpi">ESPN FPI</button>
+            <button data-v="anchored" class="on"><span class="hide-sm">Market-anchored</span><span class="show-sm">Anchored</span></button>
+            <button data-v="fpi"><span class="hide-sm">ESPN FPI</span><span class="show-sm">FPI</span></button>
             <button data-v="blend">Blend</button>
-            <button data-v="points">Adjusted points</button>
+            <button data-v="points"><span class="hide-sm">Adjusted points</span><span class="show-sm">Points</span></button>
           </div>
         </div>
         <div class="field wide">
@@ -210,7 +209,7 @@
     </form>
   </dialog>
 
-  <script src="app.js"></script>
-  <script src="game.js"></script>
+  <script src="app.js?v=11"></script>
+  <script src="game.js?v=11"></script>
 </body>
 </html>
