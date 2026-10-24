@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24T00:46Z",
+ "updated": "2026-10-24T07:22Z",
  "since": "2026-10-22T02:29Z",
  "games": 64,
  "summary": [
@@ -9,20 +9,20 @@
    "tier": "all",
    "label": "Every game",
    "picks": 64,
-   "pending": 61,
+   "pending": 56,
    "at_logged": {
-    "wins": 1,
-    "losses": 2,
+    "wins": 3,
+    "losses": 5,
     "pushes": 0,
-    "hit_rate": 0.3333
+    "hit_rate": 0.375
    },
    "at_close": {
-    "wins": 1,
-    "losses": 2,
+    "wins": 3,
+    "losses": 5,
     "pushes": 0,
-    "hit_rate": 0.3333
+    "hit_rate": 0.375
    },
-   "avg_clv": 0.6667,
+   "avg_clv": 0.75,
    "clv_beat_rate": 1.0
   },
   {
@@ -31,20 +31,20 @@
    "tier": "lean",
    "label": "Edge 1.5+",
    "picks": 22,
-   "pending": 21,
+   "pending": 19,
    "at_logged": {
     "wins": 0,
-    "losses": 1,
+    "losses": 3,
     "pushes": 0,
     "hit_rate": 0.0
    },
    "at_close": {
     "wins": 0,
-    "losses": 1,
+    "losses": 3,
     "pushes": 0,
     "hit_rate": 0.0
    },
-   "avg_clv": 2.0,
+   "avg_clv": 1.3333,
    "clv_beat_rate": 1.0
   },
   {
@@ -75,20 +75,20 @@
    "tier": "all",
    "label": "Every game",
    "picks": 64,
-   "pending": 61,
+   "pending": 56,
    "at_logged": {
-    "wins": 1,
-    "losses": 2,
+    "wins": 3,
+    "losses": 5,
     "pushes": 0,
-    "hit_rate": 0.3333
+    "hit_rate": 0.375
    },
    "at_close": {
-    "wins": 1,
-    "losses": 2,
+    "wins": 3,
+    "losses": 5,
     "pushes": 0,
-    "hit_rate": 0.3333
+    "hit_rate": 0.375
    },
-   "avg_clv": 0.6667,
+   "avg_clv": 0.75,
    "clv_beat_rate": 1.0
   },
   {
@@ -97,20 +97,20 @@
    "tier": "lean",
    "label": "Edge 1.5+",
    "picks": 39,
-   "pending": 38,
+   "pending": 33,
    "at_logged": {
-    "wins": 0,
-    "losses": 1,
+    "wins": 2,
+    "losses": 4,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.3333
    },
    "at_close": {
-    "wins": 0,
-    "losses": 1,
+    "wins": 2,
+    "losses": 4,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.3333
    },
-   "avg_clv": 2.0,
+   "avg_clv": 1.0,
    "clv_beat_rate": 1.0
   },
   {
@@ -119,20 +119,20 @@
    "tier": "strong",
    "label": "Edge 3+",
    "picks": 25,
-   "pending": 24,
+   "pending": 21,
    "at_logged": {
     "wins": 0,
-    "losses": 1,
+    "losses": 4,
     "pushes": 0,
     "hit_rate": 0.0
    },
    "at_close": {
     "wins": 0,
-    "losses": 1,
+    "losses": 4,
     "pushes": 0,
     "hit_rate": 0.0
    },
-   "avg_clv": 2.0,
+   "avg_clv": 1.5,
    "clv_beat_rate": 1.0
   },
   {
@@ -141,20 +141,20 @@
    "tier": "all",
    "label": "Every game",
    "picks": 64,
-   "pending": 61,
+   "pending": 56,
    "at_logged": {
-    "wins": 0,
-    "losses": 3,
+    "wins": 2,
+    "losses": 6,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.25
    },
    "at_close": {
-    "wins": 0,
-    "losses": 3,
+    "wins": 2,
+    "losses": 6,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.25
    },
-   "avg_clv": 0.6667,
+   "avg_clv": 0.75,
    "clv_beat_rate": 1.0
   },
   {
@@ -163,20 +163,20 @@
    "tier": "lean",
    "label": "Edge 1.5+",
    "picks": 35,
-   "pending": 34,
+   "pending": 29,
    "at_logged": {
-    "wins": 0,
-    "losses": 1,
+    "wins": 2,
+    "losses": 4,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.3333
    },
    "at_close": {
-    "wins": 0,
-    "losses": 1,
+    "wins": 2,
+    "losses": 4,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.3333
    },
-   "avg_clv": 2.0,
+   "avg_clv": 1.0,
    "clv_beat_rate": 1.0
   },
   {
@@ -185,20 +185,20 @@
    "tier": "strong",
    "label": "Edge 3+",
    "picks": 18,
-   "pending": 17,
+   "pending": 14,
    "at_logged": {
     "wins": 0,
-    "losses": 1,
+    "losses": 4,
     "pushes": 0,
     "hit_rate": 0.0
    },
    "at_close": {
     "wins": 0,
-    "losses": 1,
+    "losses": 4,
     "pushes": 0,
     "hit_rate": 0.0
    },
-   "avg_clv": 2.0,
+   "avg_clv": 1.5,
    "clv_beat_rate": 1.0
   },
   {
@@ -207,20 +207,20 @@
    "tier": "all",
    "label": "Every game",
    "picks": 64,
-   "pending": 61,
+   "pending": 56,
    "at_logged": {
-    "wins": 0,
-    "losses": 3,
+    "wins": 2,
+    "losses": 6,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.25
    },
    "at_close": {
-    "wins": 0,
-    "losses": 3,
+    "wins": 2,
+    "losses": 6,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.25
    },
-   "avg_clv": 0.6667,
+   "avg_clv": 0.75,
    "clv_beat_rate": 1.0
   },
   {
@@ -229,20 +229,20 @@
    "tier": "lean",
    "label": "Edge 1.5+",
    "picks": 49,
-   "pending": 46,
+   "pending": 42,
    "at_logged": {
-    "wins": 0,
-    "losses": 3,
+    "wins": 1,
+    "losses": 6,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.1429
    },
    "at_close": {
-    "wins": 0,
-    "losses": 3,
+    "wins": 1,
+    "losses": 6,
     "pushes": 0,
-    "hit_rate": 0.0
+    "hit_rate": 0.1429
    },
-   "avg_clv": 0.6667,
+   "avg_clv": 0.8571,
    "clv_beat_rate": 1.0
   },
   {
@@ -251,20 +251,20 @@
    "tier": "strong",
    "label": "Edge 3+",
    "picks": 28,
-   "pending": 27,
+   "pending": 24,
    "at_logged": {
     "wins": 0,
-    "losses": 1,
+    "losses": 4,
     "pushes": 0,
     "hit_rate": 0.0
    },
    "at_close": {
     "wins": 0,
-    "losses": 1,
+    "losses": 4,
     "pushes": 0,
     "hit_rate": 0.0
    },
-   "avg_clv": 2.0,
+   "avg_clv": 1.5,
    "clv_beat_rate": 1.0
   }
  ],
@@ -526,8 +526,8 @@
    "edge": 2.31,
    "tier": "lean",
    "logged_at": "2026-10-22T02:29Z",
-   "result": null,
-   "clv": null
+   "result": "L",
+   "clv": 1.0
   },
   {
    "id": "401864525",
@@ -539,8 +539,8 @@
    "edge": 2.7,
    "tier": "lean",
    "logged_at": "2026-10-22T02:29Z",
-   "result": null,
-   "clv": null
+   "result": "L",
+   "clv": 1.0
   },
   {
    "id": "401869845",
